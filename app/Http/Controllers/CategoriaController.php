@@ -6,6 +6,7 @@ use App\Http\Requests\CategoriaRequest;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CategoriaController extends Controller
 {
@@ -38,9 +39,8 @@ class CategoriaController extends Controller
 
             if ($request->icone) {
                 $categoria->icone = $request->file('icone')->store('icones/' . $categoria->id);
+                $categoria->save();
             }
-
-
         });
         return redirect()->route('admin.categoria.index')->with('success', 'Categoria criada com sucesso!');
     }
@@ -51,7 +51,7 @@ class CategoriaController extends Controller
      */
     public function show(Categoria $categoria)
     {
-        //
+        return view('admin.categorias.show', compact('categoria'));
     }
 
     /**
@@ -59,15 +59,26 @@ class CategoriaController extends Controller
      */
     public function edit(Categoria $categoria)
     {
-        //
+        return view('admin.categorias.edit', compact('categoria'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Categoria $categoria)
+    public function update(CategoriaRequest $request, Categoria $categoria)
     {
-        //
+        $data = $request->validated();
+        DB::transaction(function () use ($data, $request, $categoria) {
+            $categoria->update($data);
+
+            if ($request->icone) {
+                // apagar o icone antigo e criar um novo:
+                Storage::delete($categoria->icone);
+                $categoria->icone = $request->file('icone')->store('icones/' . $categoria->id);
+                $categoria->save();
+            }
+        });
+        return redirect()->route('admin.categoria.index')->with('success', 'Categoria atualizada com sucesso!');
     }
 
     /**
@@ -75,6 +86,8 @@ class CategoriaController extends Controller
      */
     public function destroy(Categoria $categoria)
     {
-        //
+        $categoria->delete();
+
+        return redirect()->route('admin.categoria.index')->with('success', 'Categoria deletada com sucesso!');
     }
 }

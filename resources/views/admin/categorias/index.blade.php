@@ -48,8 +48,9 @@
                             <tr>
                                 <td>{{ $categoria->id }}</td>
                                 <td>
-                                    @if($categoria->icone)
-                                        <img src="{{ Storage::url($categoria->icone) }}" alt="Icone" width="50" height="50">
+                                    @if ($categoria->icone)
+                                        <img src="{{ asset('storage/' . $categoria->icone) }}" alt="Icone" width="50"
+                                            height="50">
                                     @endif
                                 </td>
 
@@ -76,7 +77,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Excluir Administrador</h4>
+                                                    <h4 class="modal-title">Excluir Categoria</h4>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">×</span>
@@ -110,11 +111,6 @@
             @endif
         </div>
     </div>
-@stop
-
-@section('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')

@@ -8,14 +8,15 @@
 
 @section('content')
     <div class="card card-secondary card-outline">
-        <form action="{{ route('admin.categoria.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.categoria.update',$categoria->id )}}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <div class="card-body">
                 <div class="row">
                     <div class="col-xl-7 col-md-6 form-group">
                         <label for="nome">Nome<abbr title="Campo Obrigatório" class="text-danger">*</abbr></label>
                         <input type="text" class="form-control @error('nome') is-invalid @enderror" name="nome"
-                            placeholder="Nome da Categoria" value="{{old('nome') ?? ''}}">
+                            placeholder="Nome da Categoria" value="{{old('nome',$categoria->nome) ?? ''}}">
                         @error('nome')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -36,15 +37,15 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-6 d-flex justify-content-start align-items-center">
-                        <img id="icone-preview" src="#" alt="Prévia do Ícone" class="img-thumbnail"
-                            style="display: none; max-width: 150px; max-height: 150px;">
+                        <img id="icone-preview" src="{{ asset('storage/' . $categoria->icone) }}" alt="Prévia do Ícone" class="img-thumbnail"
+                            style="display: block; max-width: 150px; max-height: 150px;">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-7 col-md-6 form-group">
                         <label for="descricao">Descrição<abbr title="Campo Obrigatório" class="text-danger">*</abbr></label>
                         <input type="text" class="form-control @error('descricao') is-invalid @enderror" name="descricao"
-                            placeholder="Descrição da Categoria"  value="{{old('descricao') ?? ''}}">
+                            placeholder="Descrição da Categoria"  value="{{old('descricao',$categoria->descricao) ?? ''}}">
                         @error('descricao')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -59,7 +60,6 @@
         </form>
     </div>
 @stop
-
 
 @section('js')
     <script>
