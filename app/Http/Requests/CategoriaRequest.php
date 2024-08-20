@@ -23,7 +23,7 @@ class CategoriaRequest extends FormRequest
     {
         return [
             'nome' => ['required','string','max:255'],
-            'icone' => $this->isMethod('post') ? 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048' : 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'icone' => $this->isMethod('post') ? ['required','image','mimes:jpeg,png,jpg,gif,svg','max:2048'] : ['nullable','image','mimes:jpeg,png,jpg,gif,svg','max:2048'],
             'descricao' => ['required', 'string','max:1000'],
         ];
     }

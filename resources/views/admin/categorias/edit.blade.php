@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="card card-secondary card-outline">
-        <form action="{{ route('admin.categoria.update',$categoria->id )}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.categorias.update',$categoria->id )}}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="card-body">
@@ -37,7 +37,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-6 d-flex justify-content-start align-items-center">
-                        <img id="icone-preview" src="{{ asset('storage/' . $categoria->icone) }}" alt="Prévia do Ícone" class="img-thumbnail"
+                        <img id="icone-preview" src="{{ $categoria->getIconeUrlAttribute() }}" alt="Prévia do Ícone" class="img-thumbnail"
                             style="display: block; max-width: 150px; max-height: 150px;">
                     </div>
                 </div>
@@ -54,7 +54,7 @@
 
             </div>
             <div class="card-footer">
-                <a href="{{ route('admin.categoria.index') }}" type="button" class="btn btn-secondary">Voltar</a>
+                <a href="{{ route('admin.categorias.index') }}" type="button" class="btn btn-secondary">Voltar</a>
                 <button type="submit" class="btn btn-success">Salvar</button>
             </div>
         </form>

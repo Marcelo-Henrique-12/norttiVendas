@@ -42,7 +42,7 @@ class CategoriaController extends Controller
                 $categoria->save();
             }
         });
-        return redirect()->route('admin.categoria.index')->with('success', 'Categoria criada com sucesso!');
+        return redirect()->route('admin.categorias.index')->with('success', 'Categoria criada com sucesso!');
     }
 
 
@@ -72,13 +72,12 @@ class CategoriaController extends Controller
             $categoria->update($data);
 
             if ($request->icone) {
-                // apagar o icone antigo e criar um novo:
                 Storage::delete($categoria->icone);
                 $categoria->icone = $request->file('icone')->store('icones/' . $categoria->id);
                 $categoria->save();
             }
         });
-        return redirect()->route('admin.categoria.index')->with('success', 'Categoria atualizada com sucesso!');
+        return redirect()->route('admin.categorias.index')->with('success', 'Categoria atualizada com sucesso!');
     }
 
     /**
@@ -86,8 +85,11 @@ class CategoriaController extends Controller
      */
     public function destroy(Categoria $categoria)
     {
-        $categoria->delete();
+        DB::transaction(function () use ($categoria) {
+            Storage::delete($categoria->icone);
+            $categoria->delete();
+        });
 
-        return redirect()->route('admin.categoria.index')->with('success', 'Categoria deletada com sucesso!');
+        return redirect()->route('admin.categorias.index')->with('success', 'Categoria deletada com sucesso!');
     }
 }

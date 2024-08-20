@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="card card-secondary card-outline">
-        <form action="{{ route('admin.categoria.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.categorias.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card-body">
                 <div class="row">
@@ -53,7 +53,7 @@
 
             </div>
             <div class="card-footer">
-                <a href="{{ route('admin.categoria.index') }}" type="button" class="btn btn-secondary">Voltar</a>
+                <a href="{{ route('admin.categorias.index') }}" type="button" class="btn btn-secondary">Voltar</a>
                 <button type="submit" class="btn btn-success">Salvar</button>
             </div>
         </form>

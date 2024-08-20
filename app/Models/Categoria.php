@@ -17,11 +17,25 @@ class Categoria extends Model
         'descricao',
     ];
 
+
+    public function produtos()
+    {
+        return $this->hasMany(Produto::class);
+    }
+
+    
     public function scopeSearch($query, $request)
     {
         return $query
             ->when($request->nome, function ($query, $nome) {
                 return $query->where('nome', 'like', '%' . $nome . '%');
             });
+    }
+
+
+
+    public function getIconeUrlAttribute()
+    {
+        return asset('storage/' . $this->icone);
     }
 }

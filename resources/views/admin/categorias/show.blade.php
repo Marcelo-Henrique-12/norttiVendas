@@ -11,15 +11,26 @@
             <div class="card-body">
                 <div class="row">
                     <div class="form-group col-md-6 d-flex justify-content-start align-items-center">
-                        <img id="icone-preview" src="{{ asset('storage/' . $categoria->icone) }}" alt="Prévia do Ícone" class="img-thumbnail"
+                        <img id="icone-preview" src="{{ $categoria->getIconeUrlAttribute() }}" alt="Prévia do Ícone" class="img-thumbnail"
                             style="display: block; max-width: 150px; max-height: 150px;">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-7 col-md-6 form-group">
-                        <label for="nome">Nome<abbr title="Campo Obrigatório" class="text-danger">*</abbr></label>
+                        <label for="id">Código (Id)</label>
+                        <input disabled type="text" class="form-control @error('id') is-invalid @enderror" name="id"
+                            placeholder="" value="{{old('id',$categoria->id) ?? ''}}">
+                        @error('id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-7 col-md-6 form-group">
+                        <label for="nome">Nome</label>
                         <input disabled type="text" class="form-control @error('nome') is-invalid @enderror" name="nome"
-                            placeholder="Nome da Categoria" value="{{old('nome',$categoria->nome) ?? ''}}">
+                            value="{{old('nome',$categoria->nome) ?? ''}}">
                         @error('nome')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -29,7 +40,7 @@
 
                 <div class="row">
                     <div class="col-xl-7 col-md-6 form-group">
-                        <label for="descricao">Descrição<abbr title="Campo Obrigatório" class="text-danger">*</abbr></label>
+                        <label for="descricao">Descrição</label>
                         <input disabled type="text" class="form-control @error('descricao') is-invalid @enderror" name="descricao"
                             placeholder="Descrição da Categoria"  value="{{old('descricao',$categoria->descricao) ?? ''}}">
                         @error('descricao')
@@ -38,9 +49,20 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-xl-7 col-md-6 form-group">
+                        <label for="quantidade">Quantidade de Produtos</label>
+                        <input disabled type="text" class="form-control @error('quantidade') is-invalid @enderror" name="quantidade"
+                            placeholder="Descrição da Categoria"  value="{{old('quantidade',$categoria->produtos->count()) ?? ''}}">
+                        @error('quantidade')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
             </div>
             <div class="card-footer">
-                <a href="{{ route('admin.categoria.index') }}" type="button" class="btn btn-secondary">Voltar</a>
+                <a href="{{ route('admin.categorias.index') }}" type="button" class="btn btn-secondary">Voltar</a>
             </div>
     </div>
 @stop

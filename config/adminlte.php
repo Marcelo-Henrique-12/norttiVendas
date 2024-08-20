@@ -68,7 +68,7 @@ return [
     'logo_img_class' => 'brand-image bg-white p-1 elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => '',
+    'logo_img_alt' => 'Nortti Logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -307,10 +307,18 @@ return [
         ['header' => 'Cadastros'],
         [
             'text' => 'Categorias',
-            'url'  => 'admin/categoria/',
+            'url'  => 'admin/categorias/',
             'icon' => 'fas fa-tags',
             'active' => [
-                'admin/categoria*',
+                'admin/categorias*',
+            ],
+        ],
+        [
+            'text' => 'Produtos',
+            'url'  => 'admin/produtos/',
+            'icon' => 'fas fa-box',
+            'active' => [
+                'admin/produtos*',
             ],
         ],
         ['header' => 'account_settings'],

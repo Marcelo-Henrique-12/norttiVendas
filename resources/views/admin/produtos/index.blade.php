@@ -1,83 +1,111 @@
 @extends('adminlte::page')
 
-@section('title', 'Categorias')
+@section('title', 'Produtos')
 
 @section('content_header')
-    <h1>Categorias</h1>
+    <h1>Produtos</h1>
 @stop
 
 @section('content')
     <div class="card card-secondary">
         <div class="card-header">
-            <h3 class="card-title">Pesquisar categorias</h3>
+            <h3 class="card-title">Pesquisar produtos</h3>
         </div>
-        <form id="search_form" class="needs-validation" action="{{ route('admin.categorias.index') }}">
+        <form id="search_form" class="needs-validation" action="{{ route('admin.produtos.index') }}">
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-4 form-group">
-                        <label for="nome">Nome da categoria</label>
+                        <label for="nome">Nome do produto</label>
                         <input type="search" class="form-control" id="textfield1" name="nome"
-                            value="{{ request()->nome ?? '' }}" placeholder="Nome da Categoria">
+                            value="{{ request()->nome ?? '' }}" placeholder="Nome do produto">
+                    </div>
+
+                    <div class="col-sm-4 form-group">
+                        <label for="nome">Categoria</label>
+                        <div class="d-flex align-items-center">
+                            <select name="categoria_id" id="categoria_id" class="form-control">
+                                <option selected value=""></option>
+                                @foreach ($categorias as $categoria)
+                                    <option value="{{ $categoria->id }}"
+                                        {{ (int) old('categoria_id', request()->categoria_id)  === $categoria->id ? 'selected' : '' }}>
+                                        {{ $categoria->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <a href="{{ route('admin.categorias.create') }}" class="btn btn-outline-success"><i class="fas fa-plus"></i>
+                <a href="{{ route('admin.produtos.create') }}" class="btn btn-outline-success"><i class="fas fa-plus"></i>
                     Cadastrar</a>
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-outline-info float-right"><i class="fas fa-search"></i>
                     Pesquisar</button>
-                <a class="btn btn-outline-danger float-right" href="{{ route('admin.categorias.index') }}"
+                <a class="btn btn-outline-danger float-right" href="{{ route('admin.produtos.index') }}"
                     style="margin-right: 10px;"><i class="fas fa-times"></i> Limpar Campos</a>
             </div>
         </form>
     </div>
     <div class="card card-secondary card-outline">
         <div class="card-body table-responsive p-0">
-            @if ($categorias->count() > 0)
+            @if ($produtos->count() > 0)
                 <table class="table table-bordered table-striped dataTable dtr-inline">
                     <thead>
                         <tr>
                             <th style="width: 1%;">ID</th>
-                            <th style="width: 1%;">Ícone</th>
+                            <th style="width: 1%;">Foto</th>
                             <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Quantidade em Estoque</th>
                             <th style="width: 1%;">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categorias as $categoria)
+                        @foreach ($produtos as $produto)
                             <tr>
-                                <td>{{ $categoria->id }}</td>
+                                <td>{{ $produto->id }}</td>
                                 <td>
-                                    @if ($categoria->icone)
-                                        <img src="{{ $categoria->getIconeUrlAttribute() }}" alt="Icone" width="50"
+                                    @if ($produto->foto)
+                                        <img src="{{ $produto->getFotoUrlAttribute() }}" alt="Icone" width="50"
                                             height="50">
                                     @endif
                                 </td>
 
-                                <td>{{ $categoria->nome }}</td>
+                                <td>{{ $produto->nome }}</td>
+
 
                                 <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ $produto->categoria->getIconeUrlAttribute() }}"
+                                            alt="Icone" width="50" height="50">
+                                        <p class="ml-3">{{ $produto->categoria->nome }}</p>
+                                    </div>
+
+                                </td>
+
+                                <td>{{ $produto->quantidade }}</td>
+                                <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('admin.categorias.show', $categoria->id) }}" type="button"
+                                        <a href="{{ route('admin.produtos.show', $produto->id) }}" type="button"
                                             class="btn btn-default" title="Visualizar">
                                             <i class="far fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('admin.categorias.edit', $categoria->id) }}" type="button"
+                                        <a href="{{ route('admin.produtos.edit', $produto->id) }}" type="button"
                                             class="btn btn-primary" title="Editar">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
 
                                         <a href="#" type="button" class="btn btn-danger" data-toggle="modal"
-                                            data-target="#modal-default{{ $categoria->id }}" title="Excluir">
+                                            data-target="#modal-default{{ $produto->id }}" title="Excluir">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </div>
-                                    <div class="modal fade" id="modal-default{{ $categoria->id }}" style="display: none;"
+                                    <div class="modal fade" id="modal-default{{ $produto->id }}" style="display: none;"
                                         aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Excluir Categoria</h4>
+                                                    <h4 class="modal-title">Excluir produto</h4>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">×</span>
@@ -91,7 +119,7 @@
                                                     <button type="button" class="btn btn-default"
                                                         data-dismiss="modal">Fechar</button>
                                                     <form method="post"
-                                                        action="{{ route('admin.categorias.destroy', $categoria->id) }}"
+                                                        action="{{ route('admin.produtos.destroy', $produto->id) }}"
                                                         novalidate>
                                                         @method('delete')
                                                         @CSRF
