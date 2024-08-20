@@ -44,6 +44,11 @@ return [
             'driver' => 'session',
             'provider' => 'admins',
         ],
+        'user' => [ // Isso garante que o guard user seja reconhecido
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
     ],
 
     /*

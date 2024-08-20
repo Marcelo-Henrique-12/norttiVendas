@@ -24,8 +24,10 @@
         @endif
         <span @if(config('adminlte.usermenu_image')) class="d-none d-md-inline" @endif>
 
-            @if(Auth::guard('admin')->check()) {{ Auth::guard('admin')->user()->nome_completo }}
-             @elseif(Auth::guard('user')->check()) {{ Auth::guard('user')->user()->name }}
+            @if(Auth::guard('admin')->check())
+                {{ Auth::guard('admin')->user()->nome_completo }}
+            @elseif(Auth::user())
+                {{ Auth::user()->name }}
             @endif
 
         </span>
