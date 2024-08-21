@@ -12,33 +12,92 @@ use Illuminate\Support\Facades\DB;
 
 class CarrinhoController extends Controller
 {
-    public function index(Request $request)
-    {
 
-        $produto_id = $request->input('produto_id');
-        $quantidade = $request->input('quantidade');
 
-        $produto = Produto::find($produto_id);
+    public function exibirCarrinho()
+{
+    $carrinho = session()->get('carrinho', []);
+    $total = 0;
 
-        return view('cliente.carrinho.index', compact('produto', 'quantidade'));
+    foreach ($carrinho as $produto) {
+        $total += $produto['valor'] * $produto['quantidade'];
     }
+
+    return view('cliente.carrinho.index', compact('carrinho', 'total'));
+}
+
+
 
     public function compra(VendaRequest $request)
     {
+    
         $data = $request->validated();
 
-        DB::transaction(function () use ($data, $request) {
+        DB::transaction(function () use ($data) {
             $venda = Venda::create([
                 'total' => $data['total'],
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
 
-            $venda->produtos()->attach($data['produto_id'], ['quantidade' => $data['quantidade']]);
-            // foreach ($data['produtos'] as $produto) {
-            //     $venda->produtos()->attach($produto['id'], ['quantidade' => $produto['quantidade']]);
-            // }
+            foreach ($data['produtos'] as $produto) {
+                $venda->produtos()->attach($produto['id'], ['quantidade' => $produto['quantidade']]);
+            }
+
+            // Limpar o carrinho após a compra
+            session()->forget('carrinho');
         });
 
         return redirect()->route('cliente.home')->with('success', 'Compra realizada com sucesso!');
     }
+
+
+    public function adicionarAoCarrinho(Request $request)
+    {
+        $produtoId = $request->input('produto_id');
+        $quantidade = $request->input('quantidade', 1);
+        $quantidade = (int) $quantidade;
+
+        $carrinho = session()->get('carrinho', []);
+
+        if (isset($carrinho[$produtoId])) {
+            $carrinho[$produtoId]['quantidade'] += $quantidade;
+        } else {
+            $produto = Produto::find($produtoId);
+            $carrinho[$produtoId] = [
+                'nome' => $produto->nome,
+                'quantidade' => $quantidade,
+                'valor' => $produto->valor,
+                'foto' => $produto->getFotoUrlAttribute()
+            ];
+        }
+
+        session()->put('carrinho', $carrinho);
+
+        if ($request->input('action') === 'comprar') {
+            return redirect()->route('cliente.carrinho.index')->with('success', 'Produto adicionado ao carrinho e pronto para finalizar a compra!');
+        }
+
+        return redirect()->back()->with('success', 'Produto adicionado ao carrinho!');
+    }
+
+
+    public function remover($produtoId)
+    {
+        $carrinho = session()->get('carrinho', []);
+
+        if (isset($carrinho[$produtoId])) {
+            unset($carrinho[$produtoId]);
+            session()->put('carrinho', $carrinho);
+        }
+
+        return redirect()->route('cliente.carrinho.index')->with('success', 'Produto removido do carrinho!');
+    }
+
+    public function limpar()
+    {
+        session()->forget('carrinho');
+
+        return redirect()->route('cliente.carrinho.index')->with('success', 'Carrinho limpo com sucesso!');
+    }
+
 }

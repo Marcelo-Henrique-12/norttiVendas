@@ -23,11 +23,9 @@ class VendaRequest extends FormRequest
     {
         return [
             'total' => ['required', 'numeric'],
-            'produto_id' => ['required', 'exists:produtos,id'],
-            'quantidade' => ['required', 'numeric'],
-            // // 'produtos' => ['required', 'array'],
-            // 'produtos.*.id' => ['required', 'exists:produtos,id'],
-            // 'produtos.*.quantidade' => ['required', 'numeric'],
+            'produtos' => ['required', 'array'],
+            'produtos.*.id' => ['required', 'exists:produtos,id'],
+            'produtos.*.quantidade' => ['required', 'numeric', 'min:1'],
         ];
     }
 
@@ -38,10 +36,11 @@ class VendaRequest extends FormRequest
             'total.numeric' => 'O campo total deve ser um número',
             'produtos.required' => 'O campo produtos é obrigatório',
             'produtos.array' => 'O campo produtos deve ser um array',
-            'produtos.*.id.required' => 'O campo id é obrigatório',
+            'produtos.*.id.required' => 'O campo id do produto é obrigatório',
             'produtos.*.id.exists' => 'O produto informado não existe',
             'produtos.*.quantidade.required' => 'O campo quantidade é obrigatório',
             'produtos.*.quantidade.numeric' => 'O campo quantidade deve ser um número',
+            'produtos.*.quantidade.min' => 'A quantidade deve ser no mínimo 1',
         ];
     }
 }

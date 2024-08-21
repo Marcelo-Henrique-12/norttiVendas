@@ -30,8 +30,12 @@ Route::middleware(['auth', Authenticate::class])->name('cliente.')->group(functi
 
     Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index');
 
+
+    Route::get('/carrinho', [CarrinhoController::class, 'exibirCarrinho'])->name('carrinho.index');
+    Route::post('/carrinho/adicionar', [CarrinhoController::class, 'adicionarAoCarrinho'])->name('carrinho.adicionar');
     Route::post('/carrinho/compra', [CarrinhoController::class, 'compra'])->name('carrinho.compra');
-    Route::post('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho.index');
+    Route::delete('/carrinho/remover/{produto}', [CarrinhoController::class, 'remover'])->name('carrinho.remover');
+    Route::post('/carrinho/limpar', [CarrinhoController::class, 'limpar'])->name('carrinho.limpar');
 });
 
 
