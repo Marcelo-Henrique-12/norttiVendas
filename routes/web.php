@@ -6,8 +6,7 @@ use App\Http\Controllers\AuthAdmin\ResetPasswordController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\ProdutoAdminController;
-
-
+use App\Http\Controllers\Clientes\CarrinhoController;
 use App\Http\Controllers\Clientes\HomeController;
 use App\Http\Controllers\Clientes\ProdutoController;
 
@@ -30,6 +29,9 @@ Route::middleware(['auth', Authenticate::class])->name('cliente.')->group(functi
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index');
+
+    Route::post('/carrinho/compra', [CarrinhoController::class, 'compra'])->name('carrinho.compra');
+    Route::post('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho.index');
 });
 
 

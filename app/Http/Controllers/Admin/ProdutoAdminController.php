@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProdutodRequest;
+use App\Http\Requests\ProdutoRequest;
 use App\Models\Categoria;
 use App\Models\Produto;
 use Illuminate\Http\Request;
@@ -35,7 +35,7 @@ class ProdutoAdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProdutodRequest $request)
+    public function store(ProdutoRequest $request)
     {
         $data = $request->validated();
         DB::transaction(function () use ($data, $request) {
@@ -70,7 +70,7 @@ class ProdutoAdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProdutodRequest $request, Produto $produto)
+    public function update(ProdutoRequest $request, Produto $produto)
     {
         $data = $request->validated();
         DB::transaction(function () use ($data, $request, $produto) {

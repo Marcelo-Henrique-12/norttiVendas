@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProdutodRequest extends FormRequest
+class ProdutoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class ProdutodRequest extends FormRequest
 
     public function prepareForValidation()
     {
-       
+
         if ($this->has('valor')) {
             $this->merge([
                 'valor' => str_replace(',', '.', str_replace('.', '', $this->valor))

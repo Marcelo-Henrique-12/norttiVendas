@@ -22,6 +22,11 @@ class Produto extends Model
         return $this->belongsTo(Categoria::class);
     }
 
+    public function vendas()
+    {
+        return $this->belongsToMany(Venda::class, 'vendas_produtos')->withPivot('quantidade');
+    }
+    
     public function getFotoUrlAttribute()
     {
         return asset('storage/' . $this->foto);
