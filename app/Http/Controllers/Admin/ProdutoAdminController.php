@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ProdutodRequest;
 use App\Models\Categoria;
 use App\Models\Produto;
@@ -9,14 +10,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class ProdutoController extends Controller
+class ProdutoAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-   
+
         $categorias = Categoria::orderBy('nome')->get();
         $produtos = Produto::search($request)->orderBy('nome')->paginate()->withQueryString();
         return view('admin.produtos.index', compact('produtos','categorias'));
