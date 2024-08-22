@@ -4,6 +4,7 @@
     <div class="container">
         <h2 class="mt-5">Carrinho de Compras</h2>
 
+
         @if (!$carrinho)
             <div class="alert alert-warning" role="alert">
                 Seu carrinho está vazio!
@@ -25,7 +26,6 @@
                             </div>
                             <div class="col-md-3 d-flex align-items-center justify-content-around">
 
-
                                 {{-- decrementa --}}
                                 <form action="{{ route('cliente.carrinho.limpar') }}" method="post" class="d-flex align-items-center">
                                     @csrf
@@ -43,7 +43,7 @@
                                     <input type="hidden" name="produto_id" value="{{ $key }}">
                                     <input type="hidden" name="valor" value="{{ $item['valor'] }}">
                                     <input type="hidden" name="quantidade" value="1">
-                                    <button type="submit" value="decrementar"class="btn btn-primary ms-2"><i class="fas fa-plus"></i></button>
+                                    <button  {{ $item['quantidade'] >= App\Models\Produto::find($key)->quantidade ? 'disabled' : '' }} type="submit" value="decrementar"class="btn btn-primary ms-2"><i class="fas fa-plus"></i></button>
                                 </form>
                             </div>
                             <div class="col-md-3 d-flex justify-content-end">

@@ -19,8 +19,8 @@ class ProdutoController extends Controller
             $quantidadeCarrinho[$produtoId] = $item['quantidade'];
         }
 
-        $produtos = Produto::all();
-
+        $produtos = Produto::search($request)->orderBy('nome')->paginate()->withQueryString();
+        
         return view('cliente.produtos.index', compact('categorias', 'produtos', 'quantidadeCarrinho'));
     }
 

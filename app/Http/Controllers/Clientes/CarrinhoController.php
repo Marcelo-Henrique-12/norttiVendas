@@ -30,7 +30,7 @@ class CarrinhoController extends Controller
 
     public function compra(VendaRequest $request)
     {
-        dd($request);
+
         $data = $request->validated();
 
 
@@ -65,7 +65,7 @@ class CarrinhoController extends Controller
             session()->forget('carrinho');
         });
 
-        return redirect()->route('cliente.home')->with('success', 'Compra realizada com sucesso!');
+        return redirect()->route('cliente.compras.index')->with('success', 'Compra realizada com sucesso!');
     }
 
 

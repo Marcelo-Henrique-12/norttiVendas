@@ -49,8 +49,8 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link {{ Route::is('cliente.compras.*') ? 'active' : '' }}" aria-current="page"
-                                    href="{{ route('cliente.compras.index') }}">Compras</a>
+                                <a class="nav-link {{ Route::is('cliente.compras.*') ? 'active' : '' }}"
+                                    aria-current="page" href="{{ route('cliente.compras.index') }}">Compras</a>
                             </li>
 
                         </ul>
@@ -73,8 +73,8 @@
                                 @endif
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::is('cliente.carrinho.*') ? 'active' : '' }}" aria-current="page"
-                                        href="{{ route('cliente.carrinho.index') }}">
+                                    <a class="nav-link {{ Route::is('cliente.carrinho.*') ? 'active' : '' }}"
+                                        aria-current="page" href="{{ route('cliente.carrinho.index') }}">
                                         <i class="fa-solid fa-cart-shopping"></i>
                                         @if (session()->has('carrinho'))
                                             <span class="badge badge-pill badge-danger">
@@ -112,13 +112,39 @@
             </nav>
         @endif
         <main class="py-4">
+            {{-- Mensagens de sucesso e erro --}}
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3 mt-5"
+                    role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3 mt-5"
+                    role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @yield('content')
         </main>
     </div>
     @yield('styles')
-    {{-- Importar  o Jquery --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @yield('scripts')
+
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('.alert').fadeOut('slow', function() {
+                    $(this).remove();
+                });
+            }, 3000); // 3 segundos
+        });
+    </script>
 </body>
 
 </html>

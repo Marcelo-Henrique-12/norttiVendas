@@ -76,7 +76,7 @@ class ProdutoAdminController extends Controller
         DB::transaction(function () use ($data, $request, $produto) {
             $produto->update($data);
 
-            if ($request->icone) {
+            if ($request->foto) {
                 Storage::delete($produto->foto);
                 $produto->foto = $request->file('foto')->store('produtosFotos/' . $produto->id);
                 $produto->save();

@@ -21,4 +21,22 @@ class Venda extends Model
     {
         return $this->belongsToMany(Produto::class, 'vendas_produtos')->withPivot('quantidade');
     }
+
+    public function scopeSearch($query, $request)
+    {
+        return $query
+            ->when($request->data, function ($query, $data) {
+                return $query->whereDate('created_at', $data);
+            })->when($request->ordenar, function ($query, $ordenar) {
+                if ($ordenar === 'data_crescente') {
+                    return $query->orderBy('created_at', 'asc');
+                } elseif ($ordenar === 'data_decrescente') {
+                    return $query->orderBy('created_at', 'desc');
+                }
+            }) ->when($request->produto_id, function ($query, $produto_id) {
+                return $query->whereHas('produtos', function ($query) use ($produto_id) {
+                    $query->where('produto_id', $produto_id);
+                });
+            });
+    }
 }
