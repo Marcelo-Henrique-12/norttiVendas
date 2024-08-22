@@ -30,8 +30,23 @@ class CarrinhoController extends Controller
 
     public function compra(VendaRequest $request)
     {
+        dd($request);
         $data = $request->validated();
 
+
+
+        if (empty(session()->get('carrinho'))) {
+            return redirect()->route('cliente.home')->with('error', 'Carrinho vazio, adicione produtos antes de finalizar a compra!');
+        }
+
+        foreach ($data['produtos'] as $produto) {
+            $produtoModel = Produto::find($produto['id']);
+
+            if ($produtoModel->quantidade < $produto['quantidade']) {
+                session()->forget('carrinho');
+                return redirect()->route('cliente.home')->with('error', 'Estoque insuficiente para o produto ' . $produtoModel->nome);
+            }
+        }
         DB::transaction(function () use ($data) {
             $venda = Venda::create([
                 'total' => $data['total'],
@@ -41,9 +56,7 @@ class CarrinhoController extends Controller
             foreach ($data['produtos'] as $produto) {
                 $produtoModel = Produto::find($produto['id']);
 
-                if ($produtoModel->quantidade < $produto['quantidade']) {
-                    throw new \Exception('Estoque insuficiente para o produto ' . $produtoModel->nome);
-                }
+
 
                 $venda->produtos()->attach($produto['id'], ['quantidade' => $produto['quantidade']]);
                 $produtoModel->decrement('quantidade', $produto['quantidade']);
@@ -103,10 +116,30 @@ class CarrinhoController extends Controller
         return redirect()->route('cliente.carrinho.index')->with('success', 'Produto removido do carrinho!');
     }
 
-    public function limpar()
+    public function limpar(Request $request)
     {
-        session()->forget('carrinho');
 
-        return redirect()->route('cliente.carrinho.index')->with('success', 'Carrinho limpo com sucesso!');
+        $produtoId = $request->input('produto_id');
+        $quantidade = $request->input('quantidade', 1);
+        $quantidade = (int) $quantidade;
+
+        $produto = Produto::find($produtoId);
+
+        $carrinho = session()->get('carrinho', []);
+
+
+        if ( isset($carrinho[$produtoId]) && $quantidade <= 0) {
+            $carrinho[$produtoId]['quantidade'] -= $quantidade;
+        }
+
+
+
+        session()->put('carrinho', $carrinho);
+
+        if ($request->input('action') === 'comprar') {
+            return redirect()->route('cliente.carrinho.index')->with('success', 'Produto adicionado ao carrinho e pronto para finalizar a compra!');
+        }
+
+        return redirect()->back()->with('success', 'Produto adicionado ao carrinho!');
     }
 }

@@ -26,7 +26,7 @@ class Produto extends Model
     {
         return $this->belongsToMany(Venda::class, 'vendas_produtos')->withPivot('quantidade');
     }
-    
+
     public function getFotoUrlAttribute()
     {
         return asset('storage/' . $this->foto);
@@ -40,6 +40,13 @@ class Produto extends Model
             })
             ->when($request->categoria_id, function ($query, $categoria_id) {
                 return $query->where('categoria_id', $categoria_id);
+            })
+            ->when($request->ordenar, function ($query, $ordenar) {
+                if ($ordenar === 'preco_crescente') {
+                    return $query->orderBy('valor', 'asc');
+                } elseif ($ordenar === 'preco_decrescente') {
+                    return $query->orderBy('valor', 'desc');
+                }
             });
     }
 }

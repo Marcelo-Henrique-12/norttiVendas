@@ -38,7 +38,6 @@ Route::middleware(Authenticate::class)->name('cliente.')->group(function () {
     Route::post('/carrinho/compra', [CarrinhoController::class, 'compra'])->name('carrinho.compra');
     Route::delete('/carrinho/remover/{produto}', [CarrinhoController::class, 'remover'])->name('carrinho.remover');
     Route::post('/carrinho/limpar', [CarrinhoController::class, 'limpar'])->name('carrinho.limpar');
-
     Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
     Route::get('/compras/{venda}', [CompraController::class, 'show'])->name('compras.show');
 });

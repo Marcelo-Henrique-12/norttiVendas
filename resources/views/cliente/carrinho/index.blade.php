@@ -2,88 +2,93 @@
 
 @section('content')
     <div class="container">
-        <h3>Prévia da Compra</h3>
+        <h2 class="mt-5">Carrinho de Compras</h2>
 
         @if (!$carrinho)
             <div class="alert alert-warning" role="alert">
                 Seu carrinho está vazio!
             </div>
         @else
-            <div class="row">
-                @foreach ($carrinho as $item)
-                    <div class="col-md-3">
-                        <div class="card" style="width: 15rem;">
-                            <img src="{{ $item['foto'] }}" class="card-img-top" alt="{{ $item['nome']  }}">
-                            <div class="card-body">
-                                <h4 class="card-title">{{ $item['nome'] }}</h4>
+            <div class="d-flex mt-5">
+                <div class="bg-white rounded p-3 col-md-8">
+                    @foreach ($carrinho as $key => $item)
+                        <div class="row mb-3 align-items-center border-bottom p-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                                <img src="{{ $item['foto'] }}" class="img-fluid rounded" alt="{{ $item['nome'] }}"
+                                    width="100" height="100">
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="card-title mb-1">{{ $item['nome'] }}</h4>
                                 <h5 class="card-title">
-                                    <strong>R$ {{ number_format($item['valor'] , 2, ',', '.') }}</strong>
+                                    <strong>R$ {{ number_format($item['valor'], 2, ',', '.') }}</strong>
                                 </h5>
-                                <p>Quantidade: {{ $item['quantidade']  }}</p>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-center justify-content-around">
+
+
+                                {{-- decrementa --}}
+                                <form action="{{ route('cliente.carrinho.limpar') }}" method="post" class="d-flex align-items-center">
+                                    @csrf
+                                    <input type="hidden" name="produto_id" value="{{ $key }}">
+                                    <input type="hidden" name="valor" value="{{ $item['valor'] }}">
+                                    <input type="hidden" name="quantidade" value="1">
+                                    <button type="submit" value="adicionar"class="btn btn-primary ms-2"><i class="fas fa-minus"></i></button>
+                                </form>
+
+                                <div>{{$item['quantidade']}}</div>
+
+                                {{-- imcrementa --}}
+                                <form action="{{ route('cliente.carrinho.adicionar') }}" method="post" class="d-flex align-items-center">
+                                    @csrf
+                                    <input type="hidden" name="produto_id" value="{{ $key }}">
+                                    <input type="hidden" name="valor" value="{{ $item['valor'] }}">
+                                    <input type="hidden" name="quantidade" value="1">
+                                    <button type="submit" value="decrementar"class="btn btn-primary ms-2"><i class="fas fa-plus"></i></button>
+                                </form>
+                            </div>
+                            <div class="col-md-3 d-flex justify-content-end">
+                                <form action="{{ route('cliente.carrinho.remover', $key) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                                </form>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-
-            <div class="row mt-4">
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Produto</th>
-                                <th>Quantidade</th>
-                                <th>Valor Unitário</th>
-                                <th>Valor Total</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @foreach ($carrinho as $key =>  $item)
-                                <tr>
-                                    <td>{{ $item['nome'] }}</td>
-                                    <td>{{ $item['quantidade']  }}</td>
-                                    <td>R$ {{ number_format($item['valor'], 2, ',', '.') }}</td>
-                                    <td>R$ {{ number_format($item['valor'] * $item['quantidade'], 2, ',', '.') }}</td>
-                                    <td>
-                                        <form action="{{ route('cliente.carrinho.remover', $key) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    @endforeach
                 </div>
-                <div class="d-flex justify-content-end mt-4">
-                    <form action="{{ route('cliente.carrinho.compra') }}" method="post">
-                        @csrf
-                        @foreach ($carrinho as $produtoId => $produto)
-                            <input type="hidden" name="produtos[{{ $produtoId }}][id]" value="{{ $produtoId }}">
-                            <input type="hidden" name="produtos[{{ $produtoId }}][quantidade]" value="{{ $produto['quantidade'] }}">
-                            <input type="hidden" name="produtos[{{ $produtoId }}][valor]" value="{{ $produto['valor'] }}">
-                        @endforeach
-                        <input type="hidden" name="total" value="{{ $total }}">
-                        <div class="alert alert-success" role="alert">
-                            Total: {{{ $total }}}
+
+                <div class="bg-white rounded p-3 col-md-4 ms-md-3">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h3>Resumo</h3>
                         </div>
-                        <button type="submit" class="btn btn-primary">Finalizar Compra</button>
-                    </form>
+                        <div class="col-12">
+                            <form action="{{ route('cliente.carrinho.compra') }}" method="post">
+                                @csrf
+                                @foreach ($carrinho as $produtoId => $produto)
+                                    <input type="hidden" name="produtos[{{ $produtoId }}][id]" value="{{ $produtoId }}">
+                                    <input type="hidden" name="produtos[{{ $produtoId }}][quantidade]" value="{{ $produto['quantidade'] }}">
+                                    <input type="hidden" name="produtos[{{ $produtoId }}][valor]" value="{{ $produto['valor'] }}">
+                                @endforeach
+                                <input type="hidden" name="total" value="{{ $total }}">
+                                <h5>Total: <strong>R$ {{ number_format($total, 2, ',', '.') }} </strong></h5>
+                                <button type="submit" class="btn btn-primary mt-4">Finalizar Compra</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif
     </div>
 @endsection
 
-@section('styles')
-    <style>
-        .card-img-top {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
+@section('scripts')
+    <script>
+        function updateQuantity(produtoId, change) {
+            const input = document.getElementById(`quantidade-${produtoId}`);
+            const currentQuantity = parseInt(input.value);
+            const newQuantity = Math.max(1, currentQuantity + change);
+            input.value = newQuantity;
         }
-    </style>
+    </script>
 @endsection
