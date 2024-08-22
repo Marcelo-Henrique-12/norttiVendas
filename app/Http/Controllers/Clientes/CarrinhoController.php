@@ -123,23 +123,20 @@ class CarrinhoController extends Controller
         $quantidade = $request->input('quantidade', 1);
         $quantidade = (int) $quantidade;
 
-        $produto = Produto::find($produtoId);
-
         $carrinho = session()->get('carrinho', []);
 
 
-        if ( isset($carrinho[$produtoId]) && $quantidade <= 0) {
-            $carrinho[$produtoId]['quantidade'] -= $quantidade;
+        if ( isset($carrinho[$produtoId])) {
+            if( $carrinho[$produtoId]['quantidade'] == 1){
+                unset($carrinho[$produtoId]);
+                session()->put('carrinho', $carrinho);
+            }else{
+                $carrinho[$produtoId]['quantidade'] -= $quantidade;
+                session()->put('carrinho', $carrinho);
+            }
+        }else{
+            return redirect()->route('cliente.carrinho.index')->with('error', 'Produto não encontrado no carrinho!');
         }
-
-
-
-        session()->put('carrinho', $carrinho);
-
-        if ($request->input('action') === 'comprar') {
-            return redirect()->route('cliente.carrinho.index')->with('success', 'Produto adicionado ao carrinho e pronto para finalizar a compra!');
-        }
-
-        return redirect()->back()->with('success', 'Produto adicionado ao carrinho!');
+        return redirect()->route('cliente.carrinho.index');
     }
 }
