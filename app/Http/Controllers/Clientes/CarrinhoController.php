@@ -15,22 +15,21 @@ class CarrinhoController extends Controller
 
 
     public function exibirCarrinho()
-{
-    $carrinho = session()->get('carrinho', []);
-    $total = 0;
+    {
+        $carrinho = session()->get('carrinho', []);
+        $total = 0;
 
-    foreach ($carrinho as $produto) {
-        $total += $produto['valor'] * $produto['quantidade'];
+        foreach ($carrinho as $produto) {
+            $total += $produto['valor'] * $produto['quantidade'];
+        }
+
+        return view('cliente.carrinho.index', compact('carrinho', 'total'));
     }
-
-    return view('cliente.carrinho.index', compact('carrinho', 'total'));
-}
 
 
 
     public function compra(VendaRequest $request)
     {
-    
         $data = $request->validated();
 
         DB::transaction(function () use ($data) {
@@ -40,10 +39,16 @@ class CarrinhoController extends Controller
             ]);
 
             foreach ($data['produtos'] as $produto) {
+                $produtoModel = Produto::find($produto['id']);
+
+                if ($produtoModel->quantidade < $produto['quantidade']) {
+                    throw new \Exception('Estoque insuficiente para o produto ' . $produtoModel->nome);
+                }
+
                 $venda->produtos()->attach($produto['id'], ['quantidade' => $produto['quantidade']]);
+                $produtoModel->decrement('quantidade', $produto['quantidade']);
             }
 
-            // Limpar o carrinho após a compra
             session()->forget('carrinho');
         });
 
@@ -57,12 +62,17 @@ class CarrinhoController extends Controller
         $quantidade = $request->input('quantidade', 1);
         $quantidade = (int) $quantidade;
 
+        $produto = Produto::find($produtoId);
+
+        if ($produto->quantidade == 0) {
+            return redirect()->back()->with('error', 'Este produto está esgotado e não pode ser adicionado ao carrinho.');
+        }
+
         $carrinho = session()->get('carrinho', []);
 
         if (isset($carrinho[$produtoId])) {
             $carrinho[$produtoId]['quantidade'] += $quantidade;
         } else {
-            $produto = Produto::find($produtoId);
             $carrinho[$produtoId] = [
                 'nome' => $produto->nome,
                 'quantidade' => $quantidade,
@@ -99,5 +109,4 @@ class CarrinhoController extends Controller
 
         return redirect()->route('cliente.carrinho.index')->with('success', 'Carrinho limpo com sucesso!');
     }
-
 }

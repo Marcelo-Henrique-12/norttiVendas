@@ -39,7 +39,7 @@
                                 <a class="nav-link active" aria-current="page" href="{{ route('cliente.produtos.index') }}">Produtos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Compras</a>
+                                <a class="nav-link active" aria-current="page" href="{{ route('cliente.compras.index') }}">Compras</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="{{ route('cliente.carrinho.index') }}"><i class="fa-solid fa-cart-shopping"></i></a>

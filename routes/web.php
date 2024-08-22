@@ -7,10 +7,12 @@ use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\ProdutoAdminController;
 use App\Http\Controllers\Clientes\CarrinhoController;
+use App\Http\Controllers\Clientes\CompraController;
 use App\Http\Controllers\Clientes\HomeController;
 use App\Http\Controllers\Clientes\ProdutoController;
 
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\RedirectIfNotAdmin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,7 +26,7 @@ Route::get('/', function () {
 });
 
 // Rotas de Cliente
-Route::middleware(['auth', Authenticate::class])->name('cliente.')->group(function () {
+Route::middleware(Authenticate::class)->name('cliente.')->group(function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -36,6 +38,9 @@ Route::middleware(['auth', Authenticate::class])->name('cliente.')->group(functi
     Route::post('/carrinho/compra', [CarrinhoController::class, 'compra'])->name('carrinho.compra');
     Route::delete('/carrinho/remover/{produto}', [CarrinhoController::class, 'remover'])->name('carrinho.remover');
     Route::post('/carrinho/limpar', [CarrinhoController::class, 'limpar'])->name('carrinho.limpar');
+
+    Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
+    Route::get('/compras/{venda}', [CompraController::class, 'show'])->name('compras.show');
 });
 
 
@@ -53,7 +58,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
     // Rotas protegidas para o admin
-    Route::middleware(['auth:admin', Authenticate::class])->group(function () {
+    Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () {
         Route::get('/', [HomeAdminController::class, 'index'])->name('home');
 
         // Rotas de categorias
