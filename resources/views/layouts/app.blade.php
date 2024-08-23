@@ -39,18 +39,18 @@
                         <ul class="navbar-nav me-auto ">
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::is('cliente.home') ? 'active' : '' }}" aria-current="page"
-                                    href="{{ route('cliente.home') }}">Home</a>
+                                    href="{{ route('cliente.home') }}"><i class="fas fa-home"></i> Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::is('cliente.produtos.*') ? 'active' : '' }}"
                                     aria-current="page" href="{{ route('cliente.produtos.index') }}">
-                                    Produtos
+                                    <i class="fas fa-box"></i> Produtos
                                 </a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::is('cliente.compras.*') ? 'active' : '' }}"
-                                    aria-current="page" href="{{ route('cliente.compras.index') }}">Compras</a>
+                                    aria-current="page" href="{{ route('cliente.compras.index') }}"><i class="fa-solid fa-bag-shopping"></i> Compras</a>
                             </li>
 
                         </ul>
@@ -92,6 +92,10 @@
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{ route('cliente.perfil.index') }}">
+                                             Perfil
+                                        </a>
+
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -112,37 +116,44 @@
             </nav>
         @endif
         <main class="py-4">
-            {{-- Mensagens de sucesso e erro --}}
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3 mt-5"
-                    role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3 mt-5"
-                    role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
             @yield('content')
         </main>
     </div>
+
+    {{-- Styles --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+
+        .toast-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .toast-error {
+            background-color: #dc3545;
+            color: white;
+        }
+        .toast {
+            border-radius: 0.25rem;
+        }
+    </style>
     @yield('styles')
+
+    {{-- Scripts --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @yield('scripts')
+
+
 
     <script>
         $(document).ready(function() {
-            setTimeout(function() {
-                $('.alert').fadeOut('slow', function() {
-                    $(this).remove();
-                });
-            }, 3000); // 3 segundos
+            @if(Session::has('success'))
+                toastr.success('{{ Session::get('success') }}');
+            @endif
+
+            @if(Session::has('error'))
+                toastr.error('{{ Session::get('error') }}');
+            @endif
         });
     </script>
 </body>

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="mt-5">Carrinho de Compras</h2>
+        <h2 class="mt-5"><i class="fa-solid fa-cart-shopping"></i>   Carrinho de Compras</h2>
 
 
         @if (!$carrinho)

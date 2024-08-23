@@ -4,7 +4,7 @@
     <div class="container">
 
         <div class="mb-5">
-            <h2 class="mb-5">Produtos</h2>
+            <h2 class="mb-5 mt-5"><i class="fas fa-box"></i>   Produtos</h2>
             <form class="d-flex flex-column flex-md-row align-items-end" method="GET"
                 action="{{ route('cliente.produtos.index') }}">
 
@@ -40,8 +40,8 @@
                     </select>
                 </div>
 
-                <a href="{{ route('cliente.produtos.index') }}" class="btn btn-primary me-2">Limpar campos</a>
-                <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
+                <a href="{{ route('cliente.produtos.index') }}" class="btn btn-outline-primary me-2">Limpar campos</a>
+                <button class="btn btn-primary" type="submit">Pesquisar</button>
 
             </form>
 

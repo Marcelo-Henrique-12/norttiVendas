@@ -3,9 +3,8 @@
 @section('content')
     <div class="container">
 
-        <div class="mb-5 d-flex justify-content-center">
-            <h2 class="mb-5">Compre por categorias</h2>
-        </div>
+
+        <h2 class="mt-5"><i class="fa-solid fa-tags"></i>   Compre por Categorias</h2>
 
         <div class="row justify-content-start mt-5">
             @foreach ($categorias as $categoria)

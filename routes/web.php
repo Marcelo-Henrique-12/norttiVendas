@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\VendaAdminController;
 use App\Http\Controllers\Clientes\CarrinhoController;
 use App\Http\Controllers\Clientes\CompraController;
 use App\Http\Controllers\Clientes\HomeController;
+use App\Http\Controllers\Clientes\PerfilController;
 use App\Http\Controllers\Clientes\ProdutoController;
 
 use App\Http\Middleware\Authenticate;
@@ -30,7 +31,11 @@ Route::get('/', function () {
 // Rotas de Cliente
 Route::middleware(Authenticate::class)->name('cliente.')->group(function () {
 
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    // perfil
+    Route::get('perfil', [PerfilController::class, 'index'])->name('perfil.index');
+    Route::put('perfil/{user}', [PerfilController::class, 'update'])->name('perfil.update');
 
     Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index');
 

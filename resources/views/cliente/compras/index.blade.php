@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h3>Compras Realizadas</h3>
+        <h2 class="mt-5"><i class="fa-solid fa-bag-shopping"></i>   Compras Realizadas</h2>
 
         @if (!$compras)
             <div class="alert alert-warning" role="alert">
@@ -46,8 +46,8 @@
                         </select>
                     </div>
 
-                    <a href="{{ route('cliente.compras.index') }}" class="btn btn-primary me-2">Limpar campos</a>
-                    <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
+                    <a href="{{ route('cliente.compras.index') }}" class="btn btn-outline-primary me-2">Limpar campos</a>
+                    <button class="btn btn-primary" type="submit">Pesquisar</button>
 
                 </form>
 
