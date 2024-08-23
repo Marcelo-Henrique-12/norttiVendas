@@ -21,7 +21,7 @@
 <body>
     <div id="app">
         {{-- se a rota não for de login ou registro aparece a navbar --}}
-        @if (Route::currentRouteName() != 'login' && Route::currentRouteName() != 'register')
+        @if (Route::currentRouteName() != 'login' && Route::currentRouteName() != 'register' && Route::currentRouteName() != 'password.request' && Route::currentRouteName() != 'password.reset')
             <nav class="navbar navbar-expand-md navbar-dark bg-dark fs-6">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url('/produtos') }}">
