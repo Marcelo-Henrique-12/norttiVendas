@@ -39,17 +39,14 @@ class ResetPasswordController extends Controller
 
     protected function resetPassword($user, $password)
     {
-        // $this->setUserPassword($user, $password);
+        $this->setUserPassword($user, $password);
 
-        // $user->setRememberToken(Str::random(60));
+        $user->setRememberToken(Str::random(60));
 
-        // $user->save();
+        $user->save();
 
-        // event(new PasswordReset($user));
+        event(new PasswordReset($user));
 
-
-        // session(['contextoId' => $contexto->id]);
-
-        // $this->guard()->login($user);
+        $this->guard()->login($user);
     }
 }
