@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthAdmin\LoginController;
 use App\Http\Controllers\AuthAdmin\ResetPasswordController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\HomeAdminController;
+use App\Http\Controllers\Admin\PerfilAdminController;
 use App\Http\Controllers\Admin\ProdutoAdminController;
 use App\Http\Controllers\Admin\VendaAdminController;
 use App\Http\Controllers\Clientes\CarrinhoController;
@@ -59,7 +60,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Rotas protegidas para o admin
     Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () {
-        Route::get('/', [HomeAdminController::class, 'index'])->name('home');
+        Route::get('/home', [HomeAdminController::class, 'index'])->name('home');
 
         Route::resource('categorias', CategoriaController::class);
 
@@ -67,6 +68,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('vendas', [VendaAdminController::class, 'index'])->name('vendas.index');
         Route::get('vendas/{venda}', [VendaAdminController::class, 'show'])->name('vendas.show');
+
+        // rota de perfil do admin
+        Route::get('perfil', [PerfilAdminController::class, 'index'])->name('perfil.index');
+        Route::put('perfil/{admin}', [PerfilAdminController::class, 'update'])->name('perfil.update');
 
     });
 });
