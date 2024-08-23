@@ -19,7 +19,8 @@ class Venda extends Model
 
     public function produtos()
     {
-        return $this->belongsToMany(Produto::class, 'vendas_produtos')->withPivot('quantidade');
+        return $this->belongsToMany(Produto::class, 'vendas_produtos', 'venda_id', 'produto_id')
+            ->withPivot('quantidade', 'valor_produto');
     }
 
     public function scopeSearch($query, $request)

@@ -31,7 +31,7 @@
                             <div class="col-md-4">
                                 <h4 class="card-title mb-1">{{ $produto->nome }}</h4>
                                 <h5 class="card-title">
-                                    <strong>R$ {{ number_format($produto->valor, 2, ',', '.') }}</strong>
+                                    <strong>R$ {{ number_format($produto->pivot->valor_produto, 2, ',', '.') }}</strong>
                                 </h5>
                             </div>
                             <div class="col-md-3 d-flex align-items-center justify-content-around">

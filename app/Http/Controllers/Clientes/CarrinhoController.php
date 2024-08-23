@@ -55,10 +55,7 @@ class CarrinhoController extends Controller
 
             foreach ($data['produtos'] as $produto) {
                 $produtoModel = Produto::find($produto['id']);
-
-
-
-                $venda->produtos()->attach($produto['id'], ['quantidade' => $produto['quantidade']]);
+                $venda->produtos()->attach($produto['id'], ['quantidade' => $produto['quantidade'], 'valor_produto' => $produtoModel->valor]);
                 $produtoModel->decrement('quantidade', $produto['quantidade']);
             }
 

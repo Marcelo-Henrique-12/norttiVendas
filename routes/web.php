@@ -31,7 +31,7 @@ Route::get('/', function () {
 // Rotas de Cliente
 Route::middleware(Authenticate::class)->name('cliente.')->group(function () {
 
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // perfil
     Route::get('perfil', [PerfilController::class, 'index'])->name('perfil.index');
@@ -65,7 +65,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Rotas protegidas para o admin
     Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () {
-        Route::get('/home', [HomeAdminController::class, 'index'])->name('home');
+        Route::get('/', [HomeAdminController::class, 'index'])->name('home');
 
         Route::resource('categorias', CategoriaController::class);
 
