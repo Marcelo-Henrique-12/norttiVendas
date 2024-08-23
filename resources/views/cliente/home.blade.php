@@ -2,38 +2,59 @@
 
 @section('content')
     <div class="container">
-        <div class="d-flex justify-content-center mt-5">
-            <h1>Compre por Categorias</h1>
+
+        <div class="mb-5 d-flex justify-content-center">
+            <h2 class="mb-5">Compre por categorias</h2>
         </div>
-        <div id="carouselCategorias" class="carousel slide mt-4">
-            <div class="carousel-inner">
-                @foreach ($categorias->chunk(4) as $chunkIndex => $chunk)
-                    <div class="carousel-item {{ $chunkIndex === 0 ? 'active' : '' }}">
-                        <div class="d-flex justify-content-start">
-                            @foreach ($chunk as $categoria)
-                                <a href="{{route('cliente.produtos.index')}}">
-                                    <div class="me-2 border-0 d-flex flex-column align-items-center " style="width: 150px;">
-                                        <img src="{{ $categoria->getIconeUrlAttribute() }}"
-                                            class="rounded-circle "width="100px" height="100px"
-                                            alt="{{ $categoria->nome }}">
-                                        <div class="">
-                                            <h5 class="mt-3">{{ $categoria->nome }}</h5>
-                                        </div>
-                                    </div>
-                                </a>
-                            @endforeach
+
+        <div class="row justify-content-start mt-5">
+            @foreach ($categorias as $categoria)
+                <div class="col-md-4 col-lg-3 col-xl-2 d-flex mb-4">
+                    <!-- Link atualizado com o filtro da categoria -->
+                    <a href="{{ route('cliente.produtos.index', ['categoria_id' => $categoria->id]) }}" class="categoria-link">
+                        <div class="card flex-fill position-relative border-0 text-center">
+                            <div class="card-body">
+                                <img src="{{ $categoria->getIconeUrlAttribute() }}"
+                                    class="card-img-top rounded-circle mx-auto d-block" alt="{{ $categoria->nome }}">
+                                <p class="card-title fs-6 mt-1">{{ $categoria->nome }}</p>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselCategorias" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselCategorias" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+                    </a>
+                </div>
+            @endforeach
         </div>
     </div>
+@endsection
+
+@section('styles')
+    <style>
+        .card {
+            width: 100%;
+            transition: box-shadow 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-img-top {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+        }
+
+
+        .categoria-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .categoria-link:hover {
+            color: inherit;
+        }
+    </style>
 @endsection
