@@ -304,6 +304,15 @@ return [
             'can' => 'manage-blog',
         ],
 
+        ['header' => 'Relatórios'],
+        [
+            'text' => 'Vendas',
+            'url'  => 'admin/vendas/',
+            'icon' => 'fas fa-shopping-cart',
+            'active' => [
+                'admin/vendas*',
+            ],
+        ],
         ['header' => 'Cadastros'],
         [
             'text' => 'Categorias',

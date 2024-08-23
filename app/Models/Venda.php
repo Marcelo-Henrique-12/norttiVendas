@@ -37,6 +37,15 @@ class Venda extends Model
                 return $query->whereHas('produtos', function ($query) use ($produto_id) {
                     $query->where('produto_id', $produto_id);
                 });
+            }) ->when($request->cliente, function ($query, $cliente) {
+                return $query->whereHas('user', function ($query) use ($cliente) {
+                    $query->where('name', 'like', "%$cliente%");
+                });
+            })
+            ->when($request->categoria_id, function ($query, $categoria_id) {
+                return $query->whereHas('produtos', function ($query) use ($categoria_id) {
+                    $query->where('categoria_id', $categoria_id);
+                });
             });
     }
 }

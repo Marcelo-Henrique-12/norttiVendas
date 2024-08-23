@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthAdmin\ResetPasswordController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\ProdutoAdminController;
+use App\Http\Controllers\Admin\VendaAdminController;
 use App\Http\Controllers\Clientes\CarrinhoController;
 use App\Http\Controllers\Clientes\CompraController;
 use App\Http\Controllers\Clientes\HomeController;
@@ -60,12 +61,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () {
         Route::get('/', [HomeAdminController::class, 'index'])->name('home');
 
-        // Rotas de categorias
-
         Route::resource('categorias', CategoriaController::class);
 
-        // Rotas de produtos
-
         Route::resource('produtos', ProdutoAdminController::class);
+
+        Route::get('vendas', [VendaAdminController::class, 'index'])->name('vendas.index');
+        Route::get('vendas/{venda}', [VendaAdminController::class, 'show'])->name('vendas.show');
+
     });
 });
