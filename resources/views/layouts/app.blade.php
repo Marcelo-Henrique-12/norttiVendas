@@ -24,7 +24,7 @@
         @if (Route::currentRouteName() != 'login' && Route::currentRouteName() != 'register' && Route::currentRouteName() != 'password.request' && Route::currentRouteName() != 'password.reset')
             <nav class="navbar navbar-expand-md navbar-dark bg-dark fs-6">
                 <div class="container">
-                    <a class="navbar-brand" href="{{ url('/produtos') }}">
+                    <a class="navbar-brand" href="{{ url('/') }}">
                         {{ config('app.name', 'Laravel') }}
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

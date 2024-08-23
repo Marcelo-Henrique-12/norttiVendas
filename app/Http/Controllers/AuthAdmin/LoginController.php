@@ -23,7 +23,7 @@ class LoginController extends Controller
     protected function loggedOut(Request $request)
     {
 
-        return redirect('/admin/login');
+        return redirect('admin/login');
     }
 
     public function showLoginForm()
