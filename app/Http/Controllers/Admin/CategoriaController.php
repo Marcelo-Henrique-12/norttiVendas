@@ -45,7 +45,6 @@ class CategoriaController extends Controller
         return redirect()->route('admin.categorias.index')->with('success', 'Categoria criada com sucesso!');
     }
 
-
     /**
      * Display the specified resource.
      */
