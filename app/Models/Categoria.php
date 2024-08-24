@@ -23,7 +23,13 @@ class Categoria extends Model
         return $this->hasMany(Produto::class);
     }
 
-    
+    public function getIconeUrlAttribute()
+    {
+        return asset('storage/' . $this->icone);
+    }
+
+
+
     public function scopeSearch($query, $request)
     {
         return $query
@@ -32,10 +38,4 @@ class Categoria extends Model
             });
     }
 
-
-
-    public function getIconeUrlAttribute()
-    {
-        return asset('storage/' . $this->icone);
-    }
 }

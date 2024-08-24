@@ -13,7 +13,7 @@ use Spatie\Activitylog\LogOptions;
 
 class Admin extends Authenticatable
 {
-    use HasRoles, HasFactory, Notifiable, LogsActivity, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = ['nome_completo', 'email', 'password'];
     protected $hidden = ['password', 'remember_token'];
@@ -23,13 +23,6 @@ class Admin extends Authenticatable
     protected static $logAttributes = ['nome_completo', 'email'];
     protected static $logName = 'Administrador';
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logAll()
-            ->useLogName('admin')
-            ->logOnly(['nome_completo', 'email']);
-    }
 
     public function sendPasswordResetNotification($token)
     {

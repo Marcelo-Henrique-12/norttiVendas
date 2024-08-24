@@ -16,7 +16,7 @@ class RedirectIfNotAdmin
      */
     public function handle($request, Closure $next)
     {
-        //verificar se tem um usuário logado ou admin, se não tiver redireciona para a página de login de admin
+        //verifica se tem um usuário logado ou admin, se não tiver redireciona para a página de login de admin
         if (!Auth::guard('admin')->check()) {
             return redirect('admin/login');
         }
