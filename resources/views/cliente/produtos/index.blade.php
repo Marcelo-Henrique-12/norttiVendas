@@ -90,6 +90,7 @@
                                         width="20" height="20">
                                     {{ $produto->categoria->nome }}
                                 </p>
+                                <p>{{ $produto->vendas()->sum('quantidade')}} Compras   </p>
                                 <p class="card-title fs-4"><strong>R$
                                         {{ number_format($produto->valor, 2, ',', '.') }}</strong>
                                 </p>
