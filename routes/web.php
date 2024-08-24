@@ -29,26 +29,22 @@ Route::get('/', function () {
 });
 
 
-// Rotas de Cliente
 
-
-// Rotas que o cliente precisa estar autenticado
+// Rotas do cliente
 Route::prefix('cliente')->name('cliente.')->group(function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index');
 
-
+    // Rotas que precisam de autenticação do usuário
     Route::middleware(Authenticate::class)->group(function () {
-
-
         Route::get('perfil', [PerfilController::class, 'index'])->name('perfil.index');
         Route::put('perfil/{user}', [PerfilController::class, 'update'])->name('perfil.update');
-        Route::get('/carrinho', [CarrinhoController::class, 'exibirCarrinho'])->name('carrinho.index');
+
+        Route::get('/carrinho', [CarrinhoController::class, 'index'])->name('carrinho.index');
         Route::post('/carrinho/adicionar', [CarrinhoController::class, 'adicionarAoCarrinho'])->name('carrinho.adicionar');
+        Route::post('/carrinho/atualizar/{produto}', [CarrinhoController::class, 'atualizarCarrinho'])->name('carrinho.atualizar');
         Route::post('/carrinho/compra', [CarrinhoController::class, 'compra'])->name('carrinho.compra');
-        Route::delete('/carrinho/remover/{produto}', [CarrinhoController::class, 'remover'])->name('carrinho.remover');
-        Route::post('/carrinho/limpar', [CarrinhoController::class, 'limpar'])->name('carrinho.limpar');
         Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
         Route::get('/compras/{venda}', [CompraController::class, 'show'])->name('compras.show');
     });
@@ -68,14 +64,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 
-    // Rotas protegidas para o admin
+    // Rotas que precisam de autenticação do admin
     Route::middleware([RedirectIfNotAdmin::class])->group(function () {
+
         Route::get('/', [HomeAdminController::class, 'index'])->name('home');
 
         Route::resource('categorias', CategoriaController::class);
-
         Route::resource('produtos', ProdutoAdminController::class);
-
         Route::get('vendas', [VendaAdminController::class, 'index'])->name('vendas.index');
         Route::get('vendas/{venda}', [VendaAdminController::class, 'show'])->name('vendas.show');
 

@@ -26,13 +26,12 @@ class PerfilController extends Controller
         }
 
         $dados = $request->validated();
-
         if (isset($dados['password'])) {
             $dados['password'] = Hash::make($dados['password']);
         } else {
             unset($dados['password']);
         }
-
+        
         unset($dados['password_confirmation']);
         $user->update($dados);
 

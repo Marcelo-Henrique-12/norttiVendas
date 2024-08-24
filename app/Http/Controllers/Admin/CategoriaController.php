@@ -16,7 +16,6 @@ class CategoriaController extends Controller
      */
     public function index(Request $request)
     {
-
         $categorias = Categoria::search($request)->orderBy('nome')->paginate()->withQueryString();
         return view('admin.categorias.index', compact('categorias'));
     }
@@ -90,7 +89,6 @@ class CategoriaController extends Controller
             Storage::delete($categoria->icone);
             $categoria->delete();
         });
-
         return redirect()->route('admin.categorias.index')->with('success', 'Categoria deletada com sucesso!');
     }
 }

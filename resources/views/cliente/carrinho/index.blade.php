@@ -27,12 +27,13 @@
                             <div class="col-md-3 d-flex align-items-center justify-content-around">
 
                                 {{-- decrementa --}}
-                                <form action="{{ route('cliente.carrinho.limpar') }}" method="post" class="d-flex align-items-center">
+                                <form action="{{ route('cliente.carrinho.atualizar', $key) }}" method="post" class="d-flex align-items-center">
                                     @csrf
                                     <input type="hidden" name="produto_id" value="{{ $key }}">
                                     <input type="hidden" name="valor" value="{{ $item['valor'] }}">
                                     <input type="hidden" name="quantidade" value="1">
-                                    <button type="submit" value="adicionar"class="btn btn-primary ms-2"><i class="fas fa-minus"></i></button>
+                                    <input type="hidden" name="action" value="decrementar">
+                                    <button type="submit" class="btn btn-primary ms-2"><i class="fas fa-minus"></i></button>
                                 </form>
 
                                 <div>{{$item['quantidade']}}</div>
@@ -47,9 +48,9 @@
                                 </form>
                             </div>
                             <div class="col-md-3 d-flex justify-content-end">
-                                <form action="{{ route('cliente.carrinho.remover', $key) }}" method="post">
+                                <form action="{{ route('cliente.carrinho.atualizar', $key) }}" method="post">
                                     @csrf
-                                    @method('DELETE')
+                                    <input type="hidden" name="action" value="remover">
                                     <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
                                 </form>
                             </div>

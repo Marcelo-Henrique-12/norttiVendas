@@ -17,7 +17,6 @@ class ProdutoAdminController extends Controller
      */
     public function index(Request $request)
     {
-
         $categorias = Categoria::orderBy('nome')->get();
         $produtos = Produto::search($request)->orderBy('nome')->paginate()->withQueryString();
         return view('admin.produtos.index', compact('produtos','categorias'));
@@ -63,7 +62,6 @@ class ProdutoAdminController extends Controller
     public function edit(Produto $produto)
     {
         $categorias = Categoria::orderBy('nome')->get();
-
         return view('admin.produtos.edit', compact('produto', 'categorias'));
     }
 
@@ -89,7 +87,6 @@ class ProdutoAdminController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Produto $produto) {
-
         DB::transaction(function () use ($produto) {
             Storage::delete($produto->foto);
             $produto->delete();

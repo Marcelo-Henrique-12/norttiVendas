@@ -28,8 +28,6 @@ class PerfilAdminController extends Controller
         if ($admin->id != $loggedUser->id) {
             return redirect()->route('perfil.index')->with('error', 'Não Autorizado!');
         }
-
-
         $dados = $request->validated();
 
         if (isset($dados['password'])) {
@@ -40,7 +38,7 @@ class PerfilAdminController extends Controller
 
         unset($dados['password_confirmation']);
         $admin->update($dados);
-
+        
         return redirect()->route('admin.perfil.index')->with('success', 'Perfil atualizado com sucesso!');
     }
 }
