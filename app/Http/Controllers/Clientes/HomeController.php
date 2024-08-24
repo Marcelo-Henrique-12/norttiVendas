@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $categorias = Categoria::orderBy('nome')->get();
+        $categorias = Categoria::orderBy('nome')->paginate(20)->withQueryString();
         return view('cliente.home', compact('categorias'));
     }
 }

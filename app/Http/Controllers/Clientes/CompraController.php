@@ -17,7 +17,8 @@ class CompraController extends Controller
             ->with('produtos')
             ->search($request)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(20)
+            ->withQueryString();
         $produtosComprados = $compras->flatMap(function ($compra) {
             return $compra->produtos;
         })->unique('id');

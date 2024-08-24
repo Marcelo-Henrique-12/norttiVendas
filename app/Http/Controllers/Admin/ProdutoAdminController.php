@@ -18,7 +18,7 @@ class ProdutoAdminController extends Controller
     public function index(Request $request)
     {
         $categorias = Categoria::orderBy('nome')->get();
-        $produtos = Produto::search($request)->orderBy('nome')->paginate()->withQueryString();
+        $produtos = Produto::search($request)->orderBy('nome')->paginate(20)->withQueryString();
         return view('admin.produtos.index', compact('produtos','categorias'));
     }
 

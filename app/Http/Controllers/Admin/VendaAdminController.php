@@ -12,7 +12,7 @@ class VendaAdminController extends Controller
 {
     public function index(Request $request)
     {
-        $vendas = Venda::search($request)->orderBy('created_at', 'desc')->paginate()->withQueryString();
+        $vendas = Venda::search($request)->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
         $produtosVendidos = $vendas->flatMap(function ($venda) {
             return $venda->produtos;
         })->unique('id');

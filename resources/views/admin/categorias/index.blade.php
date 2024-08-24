@@ -106,23 +106,89 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                @if ($categorias->hasPages())
+                    <div class="card-footer">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                {{-- Link para a página anterior --}}
+                                @if ($categorias->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $categorias->previousPageUrl() }}"
+                                            tabindex="-1">Anterior</a>
+                                    </li>
+                                @endif
+
+                                {{-- Primeiro link --}}
+                                @if ($categorias->currentPage() > 3)
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $categorias->url(1) }}">1</a>
+                                    </li>
+                                    @if ($categorias->currentPage() > 4)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    @endif
+                                @endif
+
+                                {{-- Links das páginas vizinhas --}}
+                                @for ($i = max($categorias->currentPage() - 2, 1); $i <= min($categorias->currentPage() + 2, $categorias->lastPage()); $i++)
+                                    <li class="page-item {{ $i == $categorias->currentPage() ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $categorias->url($i) }}">{{ $i }}
+                                            @if ($i == $categorias->currentPage())
+                                                <span class="sr-only">(current)</span>
+                                            @endif
+                                        </a>
+                                    </li>
+                                @endfor
+
+                                {{-- Último link --}}
+                                @if ($categorias->currentPage() < $categorias->lastPage() - 2)
+                                    @if ($categorias->currentPage() < $categorias->lastPage() - 3)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            href="{{ $categorias->url($categorias->lastPage()) }}">{{ $categorias->lastPage() }}</a>
+                                    </li>
+                                @endif
+
+                                {{-- Link para a próxima página --}}
+                                @if ($categorias->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $categorias->nextPageUrl() }}">Próxima</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Próxima</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
+                    </div>
+                @endif
             @else
                 <div class="p-3 d-flex justify-content-center align-items-center"> <i>Nenhum registro encontrado</i></div>
             @endif
         </div>
-    </div>
-@stop
+    @stop
 
-@section('js')
-    <script>
-        function previewIcon(event) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var output = document.getElementById('icone-preview');
-                output.src = reader.result;
-                output.style.display = 'block';
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
-    </script>
-@stop
+    @section('js')
+        <script>
+            function previewIcon(event) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    var output = document.getElementById('icone-preview');
+                    output.src = reader.result;
+                    output.style.display = 'block';
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
+    @stop

@@ -18,7 +18,7 @@ class ProdutoController extends Controller
         foreach ($carrinho as $produtoId => $item) {
             $quantidadeCarrinho[$produtoId] = $item['quantidade'];
         }
-        $produtos = Produto::search($request)->orderBy('nome')->paginate()->withQueryString();
+        $produtos = Produto::search($request)->orderBy('nome')->paginate(20)->withQueryString();
 
         return view('cliente.produtos.index', compact('categorias', 'produtos', 'quantidadeCarrinho'));
     }

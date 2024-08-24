@@ -91,6 +91,73 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                @if ($vendas->hasPages())
+                    <div class="card-footer">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                {{-- Link para a página anterior --}}
+                                @if ($vendas->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $vendas->previousPageUrl() }}"
+                                            tabindex="-1">Anterior</a>
+                                    </li>
+                                @endif
+
+                                {{-- Primeiro link --}}
+                                @if ($vendas->currentPage() > 3)
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $vendas->url(1) }}">1</a>
+                                    </li>
+                                    @if ($vendas->currentPage() > 4)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    @endif
+                                @endif
+
+                                {{-- Links das páginas vizinhas --}}
+                                @for ($i = max($vendas->currentPage() - 2, 1); $i <= min($vendas->currentPage() + 2, $vendas->lastPage()); $i++)
+                                    <li class="page-item {{ $i == $vendas->currentPage() ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $vendas->url($i) }}">{{ $i }}
+                                            @if ($i == $vendas->currentPage())
+                                                <span class="sr-only">(current)</span>
+                                            @endif
+                                        </a>
+                                    </li>
+                                @endfor
+
+                                {{-- Último link --}}
+                                @if ($vendas->currentPage() < $vendas->lastPage() - 2)
+                                    @if ($vendas->currentPage() < $vendas->lastPage() - 3)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            href="{{ $vendas->url($vendas->lastPage()) }}">{{ $vendas->lastPage() }}</a>
+                                    </li>
+                                @endif
+
+                                {{-- Link para a próxima página --}}
+                                @if ($vendas->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $vendas->nextPageUrl() }}">Próxima</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Próxima</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
+                    </div>
+                @endif
             @else
                 <div class="p-3 d-flex justify-content-center align-items-center"> <i>Nenhum registro encontrado</i></div>
             @endif

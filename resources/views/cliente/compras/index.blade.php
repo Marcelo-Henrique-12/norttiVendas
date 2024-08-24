@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="mt-5"><i class="fa-solid fa-bag-shopping"></i>   Compras Realizadas</h2>
+        <h2 class="mt-5"><i class="fa-solid fa-bag-shopping"></i> Compras Realizadas</h2>
 
         @if (!$compras)
             <div class="alert alert-warning" role="alert">
@@ -80,6 +80,72 @@
                     </table>
                 </div>
             </div>
+            @if ($compras->hasPages())
+                <div class="card-footer">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            {{-- Link para a página anterior --}}
+                            @if ($compras->onFirstPage())
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $compras->previousPageUrl() }}"
+                                        tabindex="-1">Anterior</a>
+                                </li>
+                            @endif
+
+                            {{-- Primeiro link --}}
+                            @if ($compras->currentPage() > 3)
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $compras->url(1) }}">1</a>
+                                </li>
+                                @if ($compras->currentPage() > 4)
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                @endif
+                            @endif
+
+                            {{-- Links das páginas vizinhas --}}
+                            @for ($i = max($compras->currentPage() - 2, 1); $i <= min($compras->currentPage() + 2, $compras->lastPage()); $i++)
+                                <li class="page-item {{ $i == $compras->currentPage() ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ $compras->url($i) }}">{{ $i }}
+                                        @if ($i == $compras->currentPage())
+                                            <span class="sr-only">(current)</span>
+                                        @endif
+                                    </a>
+                                </li>
+                            @endfor
+
+                            {{-- Último link --}}
+                            @if ($compras->currentPage() < $compras->lastPage() - 2)
+                                @if ($compras->currentPage() < $compras->lastPage() - 3)
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                @endif
+                                <li class="page-item">
+                                    <a class="page-link"
+                                        href="{{ $compras->url($compras->lastPage()) }}">{{ $compras->lastPage() }}</a>
+                                </li>
+                            @endif
+
+                            {{-- Link para a próxima página --}}
+                            @if ($compras->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $compras->nextPageUrl() }}">Próxima</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Próxima</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                </div>
+            @endif
         @endif
     </div>
 @endsection

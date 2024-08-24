@@ -16,7 +16,7 @@ class CategoriaController extends Controller
      */
     public function index(Request $request)
     {
-        $categorias = Categoria::search($request)->orderBy('nome')->paginate()->withQueryString();
+        $categorias = Categoria::search($request)->orderBy('nome')->paginate(20)->withQueryString();
         return view('admin.categorias.index', compact('categorias'));
     }
 

@@ -27,7 +27,7 @@
                                 <option selected value=""></option>
                                 @foreach ($categorias as $categoria)
                                     <option value="{{ $categoria->id }}"
-                                        {{ (int) old('categoria_id', request()->categoria_id)  === $categoria->id ? 'selected' : '' }}>
+                                        {{ (int) old('categoria_id', request()->categoria_id) === $categoria->id ? 'selected' : '' }}>
                                         {{ $categoria->nome }}
                                     </option>
                                 @endforeach
@@ -76,8 +76,8 @@
 
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ $produto->categoria->getIconeUrlAttribute() }}"
-                                            alt="Icone" width="50" height="50">
+                                        <img src="{{ $produto->categoria->getIconeUrlAttribute() }}" alt="Icone"
+                                            width="50" height="50">
                                         <p class="ml-3">{{ $produto->categoria->nome }}</p>
                                     </div>
 
@@ -134,6 +134,72 @@
                         @endforeach
                     </tbody>
                 </table>
+                @if ($produtos->hasPages())
+                    <div class="card-footer">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                {{-- Link para a página anterior --}}
+                                @if ($produtos->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $produtos->previousPageUrl() }}"
+                                            tabindex="-1">Anterior</a>
+                                    </li>
+                                @endif
+
+                                {{-- Primeiro link --}}
+                                @if ($produtos->currentPage() > 3)
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $produtos->url(1) }}">1</a>
+                                    </li>
+                                    @if ($produtos->currentPage() > 4)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    @endif
+                                @endif
+
+                                {{-- Links das páginas vizinhas --}}
+                                @for ($i = max($produtos->currentPage() - 2, 1); $i <= min($produtos->currentPage() + 2, $produtos->lastPage()); $i++)
+                                    <li class="page-item {{ $i == $produtos->currentPage() ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $produtos->url($i) }}">{{ $i }}
+                                            @if ($i == $produtos->currentPage())
+                                                <span class="sr-only">(current)</span>
+                                            @endif
+                                        </a>
+                                    </li>
+                                @endfor
+
+                                {{-- Último link --}}
+                                @if ($produtos->currentPage() < $produtos->lastPage() - 2)
+                                    @if ($produtos->currentPage() < $produtos->lastPage() - 3)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            href="{{ $produtos->url($produtos->lastPage()) }}">{{ $produtos->lastPage() }}</a>
+                                    </li>
+                                @endif
+
+                                {{-- Link para a próxima página --}}
+                                @if ($produtos->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $produtos->nextPageUrl() }}">Próxima</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Próxima</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
+                    </div>
+                @endif
             @else
                 <div class="p-3 d-flex justify-content-center align-items-center"> <i>Nenhum registro encontrado</i></div>
             @endif
