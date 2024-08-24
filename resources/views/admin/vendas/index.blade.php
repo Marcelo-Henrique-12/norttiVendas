@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="col-sm-3 form-group">
-                        <label for="nome">Categoria</label>
+                        <label for="categoria_id">Categoria Vendidas</label>
                         <div class="d-flex align-items-center">
                             <select name="categoria_id" id="categoria_id" class="form-control">
                                 <option selected value=""></option>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="col-sm-3 form-group">
-                        <label for="nome">Produtos</label>
+                        <label for="produto_id">Produtos Vendidos</label>
                         <div class="d-flex align-items-center">
                             <select name="produto_id" id="produto_id" class="form-control">
                                 <option selected value=""></option>
@@ -45,6 +45,28 @@
                                         {{ $produto->nome }}
                                     </option>
                                 @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 form-group">
+                        <label for="data">Data da Venda</label>
+                        <input type="date" class="form-control" id="textfield1" name="data"
+                            value="{{ request()->data ?? '' }}">
+                    </div>
+
+                    <div class="col-sm-3 form-group">
+                        <label for="ordenar">Ordenar por</label>
+                        <div class="d-flex align-items-center">
+                            <select name="ordenar" id="ordenar" class="form-control">
+                                <option selected value=""></option>
+                                <option value="data_crescente"
+                                    {{ old('ordenar', request()->ordenar) == 'data_crescente' ? 'selected' : '' }}>Mais
+                                    recentes</option>
+                                <option value="data_decrescente"
+                                    {{ old('ordenar', request()->ordenar) == 'data_decrescente' ? 'data_decrescente' : '' }}>
+                                    Mais antigas</option>
                             </select>
                         </div>
                     </div>

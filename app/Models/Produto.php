@@ -42,10 +42,28 @@ class Produto extends Model
                 return $query->where('categoria_id', $categoria_id);
             })
             ->when($request->ordenar, function ($query, $ordenar) {
-                if ($ordenar === 'preco_crescente') {
-                    return $query->orderBy('valor', 'asc');
-                } elseif ($ordenar === 'preco_decrescente') {
-                    return $query->orderBy('valor', 'desc');
+                switch ($ordenar) {
+                    case 'preco_crescente':
+                        return $query->orderBy('valor', 'asc');
+                        break;
+                    case 'preco_decrescente':
+                        return $query->orderBy('valor', 'desc');
+                        break;
+                    case 'nome_crescente':
+                        return $query->orderBy('nome', 'asc');
+                        break;
+                    case 'nome_decrescente':
+                        return $query->orderBy('nome', 'desc');
+                        break;
+                    case 'mais_vendidos':
+                        return $query->orderByRaw('(SELECT COUNT(*) FROM vendas_produtos WHERE produto_id = produtos.id) DESC');
+                        break;
+                    case 'menos_vendidos':
+                        return $query->orderByRaw('(SELECT COUNT(*) FROM vendas_produtos WHERE produto_id = produtos.id) ASC');
+                        break;
+                    default:
+                        return $query;
+                        break;
                 }
             });
     }
