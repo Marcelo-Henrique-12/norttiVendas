@@ -5,7 +5,7 @@
         @if (!$categorias->count())
             <div class="container">
                 <div class="alert alert-warning" role="alert">
-                    Nenhum produto encontrado.
+                    Nenhuma categoria encontrada.
                 </div>
             </div>
         @else

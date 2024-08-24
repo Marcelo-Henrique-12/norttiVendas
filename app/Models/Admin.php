@@ -15,14 +15,8 @@ class Admin extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
-    protected $fillable = ['nome_completo', 'email', 'password'];
+    protected $fillable = ['nome', 'email', 'password'];
     protected $hidden = ['password', 'remember_token'];
-
-    protected static $logOnlyDirty = true;
-    protected static $submitEmptyLogs = false;
-    protected static $logAttributes = ['nome_completo', 'email'];
-    protected static $logName = 'Administrador';
-
 
     public function sendPasswordResetNotification($token)
     {

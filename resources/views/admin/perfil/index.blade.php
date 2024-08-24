@@ -15,10 +15,10 @@
 
                 <div class="row">
                     <div class="col-xl-4 form-group">
-                        <label for="nome_completo">Nome<abbr title="Campo Obrigatório" class="text-danger">*</abbr></label>
-                        <input type="text" class="form-control @error('nome_completo') is-invalid @enderror" name="nome_completo"
-                            placeholder="Nome" value="{{ old('nome_completo',$admin->nome_completo) ?? '' }}">
-                        @error('nome_completo')
+                        <label for="nome">Nome<abbr title="Campo Obrigatório" class="text-danger">*</abbr></label>
+                        <input type="text" class="form-control @error('nome') is-invalid @enderror" name="nome"
+                            placeholder="Nome" value="{{ old('nome',$admin->nome) ?? '' }}">
+                        @error('nome')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -34,9 +34,11 @@
                         @enderror
                     </div>
                 </div>
+
+                <h4 class="mt-3">Trocar a Senha</h4>
                 <div class="row">
                     <div class="col-xl-4 form-group">
-                        <label for="password">Senha<abbr title="Campo Obrigatório" class="text-danger">*</abbr></label>
+                        <label for="password"> Nova Senha<abbr title="Campo Obrigatório" class="text-danger">*</abbr></label>
                         <input type="password" class="form-control @error('password') is-invalid @enderror" name="password"
                             placeholder="Senha" value="{{ old('password') ?? '' }}">
                         @error('password')

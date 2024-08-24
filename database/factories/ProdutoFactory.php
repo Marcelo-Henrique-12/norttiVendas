@@ -5,9 +5,9 @@ namespace Database\Factories;
 use App\Models\Produto;
 use App\Models\Categoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Http;
 
 class ProdutoFactory extends Factory
 {
@@ -15,31 +15,50 @@ class ProdutoFactory extends Factory
 
     public function definition()
     {
-        $nome = $this->faker->word();
+        // Gera um nome aleatório para o produto
+        $nome = ucfirst($this->faker->word());
 
+        // URL para uma imagem aleatória
         $randomImageUrl = 'https://picsum.photos/200/200';
-        $imageContents = Http::withoutVerifying()->get($randomImageUrl)->body();
-        $imageName = 'produto_' . Str::random(10) . '.jpg';
-        $imagePath = 'produtosFotos/temp/' . $imageName;
-        Storage::disk('public')->put($imagePath, $imageContents);
 
+        // Faz o download da imagem aleatória
+        $imageContents = Http::withoutVerifying()->get($randomImageUrl)->body();
+
+        // Gera um nome aleatório para o arquivo da imagem
+        $imageName = 'produto_' . Str::random(10) . '.jpg';
+        $tempPath = 'produtosFotos/temp/' . $imageName;
+
+        // Salva a imagem no diretório temporário
+        Storage::disk('public')->put($tempPath, $imageContents);
+
+        // Obtém um ID de categoria aleatória
         $categoriaId = Categoria::inRandomOrder()->first()->id;
 
-        $produto = Produto::create([
-            'nome' => ucfirst($nome),
-            'foto' => $imagePath,
+        return [
+            'nome' => $nome,
+            'foto' => $tempPath, // Define o caminho temporário da imagem
             'valor' => $this->faker->randomFloat(2, 1, 1000),
             'categoria_id' => $categoriaId,
             'quantidade' => $this->faker->numberBetween(1, 100),
-        ]);
+        ];
+    }
 
-        $newPath = 'icones/' . $produto->id . '/' . $imageName;
+    /**
+     * Configura uma função de callback após a criação para mover a imagem para o diretório correto.
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Produto $produto) {
+            // Gera o caminho final para a imagem baseado no ID do produto
+            $imageName = basename($produto->foto); // Obtém o nome do arquivo da imagem do caminho temporário
+            $newPath = 'produtosFotos/' . $produto->id . '/' . $imageName;
 
-        Storage::disk('public')->move($imagePath, $newPath);
+            // Move a imagem do caminho temporário para o novo caminho
+            Storage::disk('public')->move($produto->foto, $newPath);
 
-        $produto->foto = $newPath;
-        $produto->save();
-
-        return $produto->toArray();
+            // Atualiza o atributo 'foto' do modelo com o novo caminho
+            $produto->foto = $newPath;
+            $produto->save();
+        });
     }
 }

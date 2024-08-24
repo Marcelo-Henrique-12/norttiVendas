@@ -22,7 +22,7 @@ class UpdateAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome_completo' => ['required', 'string', 'max:255'],
+            'nome' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:admins,email,' . $this->admin->id],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ];

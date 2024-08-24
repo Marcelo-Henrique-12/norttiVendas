@@ -4,9 +4,9 @@ namespace Database\Factories;
 
 use App\Models\Categoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Http;
 
 class CategoriaFactory extends Factory
 {
@@ -14,28 +14,46 @@ class CategoriaFactory extends Factory
 
     public function definition()
     {
-        $nome = $this->faker->word();
+        // Gera um nome aleatório para a categoria
+        $nome = ucfirst($this->faker->word());
 
+        // URL para uma imagem aleatória
         $randomImageUrl = 'https://picsum.photos/100/100';
 
+        // Faz o download da imagem aleatória
         $imageContents = Http::withoutVerifying()->get($randomImageUrl)->body();
+
+        // Gera um nome aleatório para o arquivo da imagem
         $imageName = 'icone_' . Str::random(10) . '.jpg';
         $tempPath = 'icones/temp/' . $imageName;
+
+        // Salva a imagem no diretório temporário
         Storage::disk('public')->put($tempPath, $imageContents);
 
-        $categoria = Categoria::create([
-            'nome' => ucfirst($nome),
-            'icone' => $tempPath,
+        return [
+            'nome' => $nome,
             'descricao' => $this->faker->sentence(),
-        ]);
+            // Define o caminho temporário da imagem como o ícone da categoria inicialmente
+            'icone' => $tempPath,
+        ];
+    }
 
-        $newPath = 'icones/' . $categoria->id . '/' . $imageName;
+    /**
+     * Configura uma função de callback após a criação para mover a imagem para o diretório correto.
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Categoria $categoria) {
+            // Gera o caminho final para a imagem baseada no ID da categoria
+            $imageName = basename($categoria->icone); // Obtém o nome do arquivo da imagem do caminho temporário
+            $newPath = 'icones/' . $categoria->id . '/' . $imageName;
 
-        Storage::disk('public')->move($tempPath, $newPath);
+            // Move a imagem do caminho temporário para o novo caminho
+            Storage::disk('public')->move($categoria->icone, $newPath);
 
-        $categoria->icone = $newPath;
-        $categoria->save();
-
-        return $categoria->toArray();
+            // Atualiza o atributo 'icone' do modelo com o novo caminho
+            $categoria->icone = $newPath;
+            $categoria->save();
+        });
     }
 }
