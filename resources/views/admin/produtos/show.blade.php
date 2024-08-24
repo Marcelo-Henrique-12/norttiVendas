@@ -62,7 +62,6 @@
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-xl-4 form-group">
                     <label for="quantidade">Quantidade Disponível</label>
@@ -72,6 +71,16 @@
                 </div>
 
             </div>
+
+            <div class="row">
+                <div class="col-xl-4 form-group">
+                    <label for="quantidade">Quantidade Vendida</label>
+                    <input disabled type="number" class="form-control @error('quantidade') is-invalid @enderror"
+                        id="quantidade" name="quantidade" placeholder="Quantidade do produto em estoque"
+                        value="{{ old('quantidade', $produto->vendas()->sum('quantidade')) ?? '' }}">
+                </div>
+            </div>
+
             <div class="card-footer">
                 <a href="{{ route('admin.produtos.index') }}" type="button" class="btn btn-secondary">Voltar</a>
                 <a href="{{ route('admin.produtos.edit', $produto->id) }}" type="button" class="btn btn-success">Editar</a>
