@@ -24,38 +24,6 @@ class CarrinhoController extends Controller
         return view('cliente.carrinho.index', compact('carrinho', 'total'));
     }
 
-    // Finaliza a compra
-    public function compra(VendaRequest $request)
-    {
-        $data = $request->validated();
-
-        if (empty(session()->get('carrinho'))) {
-            return redirect()->route('cliente.home')->with('error', 'Carrinho vazio, adicione produtos antes de finalizar a compra!');
-        }
-        foreach ($data['produtos'] as $produto) {
-            $produtoModel = Produto::find($produto['id']);
-
-            if ($produtoModel->quantidade < $produto['quantidade']) {
-                session()->forget('carrinho');
-                return redirect()->route('cliente.home')->with('error', 'Estoque insuficiente para o produto ' . $produtoModel->nome);
-            }
-        }
-        DB::transaction(function () use ($data) {
-            $venda = Venda::create([
-                'total' => $data['total'],
-                'user_id' => Auth::id(),
-            ]);
-            foreach ($data['produtos'] as $produto) {
-                $produtoModel = Produto::find($produto['id']);
-                $venda->produtos()->attach($produto['id'], ['quantidade' => $produto['quantidade'], 'valor_produto' => $produtoModel->valor]);
-                $produtoModel->decrement('quantidade', $produto['quantidade']);
-            }
-            session()->forget('carrinho');
-        });
-
-        return redirect()->route('cliente.compras.index')->with('success', 'Compra realizada com sucesso!');
-    }
-
     // Adiciona um produto ao carrinho
     public function adicionarAoCarrinho(Request $request)
     {
@@ -70,7 +38,7 @@ class CarrinhoController extends Controller
         }
 
         $carrinho = session()->get('carrinho', []);
-        
+
         if (isset($carrinho[$produtoId])) {
             $carrinho[$produtoId]['quantidade'] += $quantidade;
         } else {
@@ -112,4 +80,39 @@ class CarrinhoController extends Controller
 
         return redirect()->route('cliente.carrinho.index')->with('success', 'Carrinho atualizado com sucesso!');
     }
+
+
+    // Finaliza a compra
+    public function compra(VendaRequest $request)
+    {
+        $data = $request->validated();
+
+        if (empty(session()->get('carrinho'))) {
+            return redirect()->route('cliente.home')->with('error', 'Carrinho vazio, adicione produtos antes de finalizar a compra!');
+        }
+        foreach ($data['produtos'] as $produto) {
+            $produtoModel = Produto::find($produto['id']);
+
+            if ($produtoModel->quantidade < $produto['quantidade']) {
+                session()->forget('carrinho');
+                return redirect()->route('cliente.home')->with('error', 'Estoque insuficiente para o produto ' . $produtoModel->nome);
+            }
+        }
+        DB::transaction(function () use ($data) {
+            $venda = Venda::create([
+                'total' => $data['total'],
+                'user_id' => Auth::id(),
+            ]);
+            foreach ($data['produtos'] as $produto) {
+                $produtoModel = Produto::find($produto['id']);
+                $venda->produtos()->attach($produto['id'], ['quantidade' => $produto['quantidade'], 'valor_produto' => $produtoModel->valor]);
+                $produtoModel->decrement('quantidade', $produto['quantidade']);
+            }
+            session()->forget('carrinho');
+        });
+
+        return redirect()->route('cliente.compras.index')->with('success', 'Compra realizada com sucesso!');
+    }
+
+    
 }

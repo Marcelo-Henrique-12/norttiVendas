@@ -6,11 +6,32 @@ use App\Models\Admin;
 use App\Models\Venda;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class VendaAdminTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        Storage::fake('public');
+    }
+
+
+    /**
+     * Limpeza após cada teste.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        // Limpa qualquer ícone remanescente do teste
+        Storage::disk('public')->deleteDirectory('icones');
+        Storage::disk('public')->deleteDirectory('produtosFotos');
+        parent::tearDown();
+    }
 
     public function test_it_displays_sales_with_products_and_categories()
     {
@@ -57,4 +78,7 @@ class VendaAdminTest extends TestCase
         // Verificar se a venda está presente na view
         $response->assertViewHas('venda', $venda);
     }
+
+
+    
 }
