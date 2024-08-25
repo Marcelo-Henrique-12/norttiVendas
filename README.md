@@ -47,6 +47,8 @@ Já o cliente, utiliza de seu login e páginas próprias para visualizar os prod
     cp .env.example .env
 
 4. O sistema utiliza por padrão no .env o mysql, altere para o banco de dados de preferência, e atualize os dados no .env:
+
+     ```bash
     DB_CONNECTION= "Sua Conexão de banco de dados"
     DB_HOST=127.0.0.1
     DB_PORT= suaPorta
@@ -54,26 +56,27 @@ Já o cliente, utiliza de seu login e páginas próprias para visualizar os prod
     DB_USERNAME= "Usuário do Banco"
     DB_PASSWORD= "Senha do usuário do Banco"
 
-5. Gere a chave da aplicação:
+6. Gere a chave da aplicação:
 
+     ```bash
     php artisan key:generate
 
-6. Execute as migrações e seeders do banco de dados:
+7. Execute as migrações e seeders do banco de dados:
 
+    ```bash
     php artisan migrate --seed
 
-7. Instale as dependências do Node.js:
-
+8. Instale as dependências do Node.js:
+     ```bash
     npm install
 
-8. Compile os ativos front-end:
-
+9. Compile os ativos front-end:
+     ```bash
     npm run dev
 
-9. Inicie o servidor de desenvolvimento:
-
+10. Inicie o servidor de desenvolvimento:
+     ```bash
     php artisan serve
-
 
 ## Uso Como Usuário/Cliente
 
@@ -93,12 +96,13 @@ Por padrão ao rodar o passo 5 da instalação, há um seeder que registra um ad
 
 Ao realizar login como administrador é possível alterar estes dados na tela de configurações do Perfil.
 
-
 ## Rodando Testes Unitários
 
 **Importante** Crie um banco de dados reserva e altere no .env, e crie uma branch nova pois os arquivos da pasta storage serão deletados nos testes.
 
-Recomendável realizar estes testes antes de inserir dados no aplicativo
+
+Recomendável realizar estes testes antes de inserir dados no aplicativo.
+Nota: é importante descomentar o extension=gd do arquivo php.ini para o funcionamento dos testes.
 
 Para rodar os testes, execute o seguinte comando:
 
@@ -112,7 +116,7 @@ Para rodar os testes isolados, execute o seguinte comando:
 
 **Importante** os dados gerados são ficticios, apenas para o teste de inclusão em massa, recomendável utilizar para testes e com um banco de dados para teste.
 
-Recomendável realizar estes testes antes de inserir dados no aplicativo
+Recomendável realizar estes testes antes de inserir dados no aplicativo.
 
 Para rodar as seeders, execute os seguintes comandos:
 
@@ -123,7 +127,7 @@ Para rodar as seeders, execute os seguintes comandos:
 ## Estrutura do Projeto
 
 O projeto segue a estrutura padrão do Laravel. Abaixo estão alguns dos diretórios e arquivos principais:
-
+ ```bash
 app/: Contém os modelos, controladores, e outros arquivos principais da aplicação.
 resources/views/: Contém as views Blade usadas na aplicação.
 resources/js/: Contém os arquivos JavaScript utilizados na aplicação.
