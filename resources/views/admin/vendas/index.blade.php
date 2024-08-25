@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="col-sm-3 form-group">
-                        <label for="categoria_id">Categoria Vendidas</label>
+                        <label for="categoria_id">Categorias Vendidas</label>
                         <div class="d-flex align-items-center">
                             <select name="categoria_id" id="categoria_id" class="form-control">
                                 <option selected value=""></option>
