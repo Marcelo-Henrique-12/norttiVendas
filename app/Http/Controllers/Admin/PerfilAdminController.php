@@ -26,7 +26,7 @@ class PerfilAdminController extends Controller
         $loggedUser = Auth::guard('admin')->user();
 
         if ($admin->id != $loggedUser->id) {
-            return redirect()->route('perfil.index')->with('error', 'Não Autorizado!');
+            return redirect()->route('admin.perfil.index')->with('error', 'Não Autorizado!');
         }
         $dados = $request->validated();
 
