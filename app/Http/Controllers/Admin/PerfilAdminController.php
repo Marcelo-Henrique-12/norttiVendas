@@ -38,7 +38,7 @@ class PerfilAdminController extends Controller
 
         unset($dados['password_confirmation']);
         $admin->update($dados);
-        
+
         return redirect()->route('admin.perfil.index')->with('success', 'Perfil atualizado com sucesso!');
     }
 }

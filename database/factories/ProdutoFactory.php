@@ -31,8 +31,14 @@ class ProdutoFactory extends Factory
         // Salva a imagem no diretório temporário
         Storage::disk('public')->put($tempPath, $imageContents);
 
-        // Obtém um ID de categoria aleatória
-        $categoriaId = Categoria::inRandomOrder()->first()->id;
+        // Obtém um ID de categoria aleatória se tiver alguma criada, se não cria com a factory e pega uma
+        $categoriaCount = Categoria::count();
+
+        if ($categoriaCount == 0) {
+            $categoriaId = Categoria::factory()->create();
+        } else {
+            $categoriaId = Categoria::inRandomOrder()->first()->id;
+        }
 
         return [
             'nome' => $nome,
