@@ -7,60 +7,128 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Sobre o Projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Este é um projeto que utiliza o framework [Laravel](https://laravel.com), para o cadastro e manutenção do estoque de Produtos com suas respectivas Categorias na parte do administrador, e vendas na área do cliente. Este projeto utiliza o Laravel AdminLTE para um painel de administração, bem como o Laravel UI para scaffolding de autenticação.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+O administrador utiliza de um login e páginas protegidas para o cadastro e atualização de Categorias e Produtos, e monitoramento de vendas.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Já o cliente, utiliza de seu login e páginas próprias para visualizar os produtos cadastrados, e realizar compra dos mesmos. Há um sistema de filtragem dos produtos pela sua categoria e relevância, conforme os mais vendidos. Há também um sistema em que o usuário pode adicionar ao carrinho itens antes de finalizar a compra.
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Principais Pacotes Utilizados
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **PHP**: ^8.2
+- **Laravel Framework**: ^11.9
+- **Laravel AdminLTE**: ^3.13
+- **Bootstrap**: "^5.2.3",
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Requisitos
 
-## Laravel Sponsors
+- **PHP**: 8.2 ou superior
+- **Composer**: para gerenciamento de dependências PHP
+- **Node.js**: 18 ou superior
+- **NPM**: 8 ou superior
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Instalação
 
-### Premium Partners
+1. Clone o repositório:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+   ```bash
+   git clone https://github.com/Marcelo-Henrique-12/norttiVendas.git
+   cd seu-repositorio
 
-## Contributing
+2. Instale as dependências do Composer:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    composer install
 
-## Code of Conduct
+3. Copie o arquivo .env.example para .env e configure o banco de dados e outras variáveis de ambiente:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    cp .env.example .env
 
-## Security Vulnerabilities
+4. O sistema utiliza por padrão no .env o mysql, altere para o banco de dados de preferência, e atualize os dados no .env:
+    DB_CONNECTION= "Sua Conexão de banco de dados"
+    DB_HOST=127.0.0.1
+    DB_PORT= suaPorta
+    DB_DATABASE= "Nome do Banco Criado"
+    DB_USERNAME= "Usuário do Banco"
+    DB_PASSWORD= "Senha do usuário do Banco"
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. Gere a chave da aplicação:
 
-## License
+    php artisan key:generate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. Execute as migrações e seeders do banco de dados:
+
+    php artisan migrate --seed
+
+7. Instale as dependências do Node.js:
+
+    npm install
+
+8. Compile os ativos front-end:
+
+    npm run dev
+
+9. Inicie o servidor de desenvolvimento:
+
+    php artisan serve
+
+
+## Uso Como Usuário/Cliente
+
+Após configurar o ambiente de desenvolvimento, você pode acessar a aplicação em http://localhost:8000.
+
+Para realizar algumas operações como usuário é necessário registrar-se e fazer o login.
+
+## Uso Como Administrador
+
+Após configurar o ambiente de desenvolvimento, você pode acessar a aplicação em http://localhost:8000/admin.
+
+Por padrão ao rodar o passo 5 da instalação, há um seeder que registra um administrador com os seguintes dados:
+
+    nome: Admin
+    e-mail de acesso: admin@contato.br
+    senha: 12345678
+
+Ao realizar login como administrador é possível alterar estes dados na tela de configurações do Perfil.
+
+
+## Rodando Testes Unitários
+
+**Importante** Crie um banco de dados reserva e altere no .env, e crie uma branch nova pois os arquivos da pasta storage serão deletados nos testes.
+
+Recomendável realizar estes testes antes de inserir dados no aplicativo
+
+Para rodar os testes, execute o seguinte comando:
+
+    php artisan test
+
+Para rodar os testes isolados, execute o seguinte comando:
+
+    php artisan test --filter NomeDoMetodoDeTeste
+
+## Rodando Seeders para teste
+
+**Importante** os dados gerados são ficticios, apenas para o teste de inclusão em massa, recomendável utilizar para testes e com um banco de dados para teste.
+
+Recomendável realizar estes testes antes de inserir dados no aplicativo
+
+Para rodar as seeders, execute os seguintes comandos:
+
+    php artisan db:seed --class=CategoriaSeeder
+    php artisan db:seed --class=ProdutoSeeder
+    php artisan db:seed --class=VendaSeeder
+
+## Estrutura do Projeto
+
+O projeto segue a estrutura padrão do Laravel. Abaixo estão alguns dos diretórios e arquivos principais:
+
+app/: Contém os modelos, controladores, e outros arquivos principais da aplicação.
+resources/views/: Contém as views Blade usadas na aplicação.
+resources/js/: Contém os arquivos JavaScript utilizados na aplicação.
+resources/css/: Contém os arquivos CSS utilizados na aplicação.
+routes/: Contém os arquivos de rotas (web.php, api.php, etc.).
+database/migrations/: Contém os arquivos de migração para o banco de dados.
+
+
