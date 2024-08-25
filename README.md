@@ -36,7 +36,7 @@ Já o cliente, utiliza de seu login e páginas próprias para visualizar os prod
 
    ```bash
    git clone https://github.com/Marcelo-Henrique-12/norttiVendas.git
-   cd seu-repositorio
+   cd norttiVendas
 
 2. Instale as dependências do Composer:
 
